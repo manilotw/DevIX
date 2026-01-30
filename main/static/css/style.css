@@ -149,9 +149,7 @@ p {
     left: 0;
     right: 0;
     z-index: 100;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(var(--glass-blur));
-    border-bottom: 1px solid var(--glass-border);
+    background: #000000;
     padding: 1rem 0;
     transition: all var(--transition-base);
 }
@@ -431,8 +429,6 @@ p {
 .trust-section {
     padding: var(--spacing-lg) 0;
     text-align: center;
-    border-top: 1px solid var(--glass-border);
-    border-bottom: 1px solid var(--glass-border);
     background: var(--color-bg-secondary);
     z-index: 2;
     position: relative;
@@ -975,7 +971,6 @@ p {
 /* ==================== FOOTER ==================== */
 .footer {
     padding: 4rem 0 2rem;
-    border-top: 1px solid var(--glass-border);
     background: var(--color-bg-secondary);
     z-index: 2;
     position: relative;
@@ -1021,7 +1016,6 @@ p {
 
 .footer-bottom {
     padding-top: 2rem;
-    border-top: 1px solid var(--glass-border);
     text-align: center;
 }
 
@@ -3094,7 +3088,6 @@ p {
         right: 0;
         background: rgba(0, 0, 0, 0.98);
         backdrop-filter: blur(20px);
-        border-bottom: 1px solid var(--glass-border);
         max-height: 0;
         overflow: hidden;
         transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
