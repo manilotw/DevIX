@@ -23,7 +23,7 @@
     document.documentElement.style.opacity = '0';
   </script>
 
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=18">
   
   <!-- Sync Translation Loader -->
   <script>
@@ -410,7 +410,7 @@
                     <div class="option-title" data-i18n="calc_type_landing">Лендинг (Landing Page)</div>
                     <div class="option-desc" data-i18n="calc_type_landing_desc">Одностраничный сайт для продукта или услуги</div>
                   </div>
-                  <span class="option-price">от $99</span>
+                <span class="option-price"><span data-i18n="calc_price_from">от</span> $99</span>
                 </label>
                 <label class="radio-option">
                   <input type="radio" name="siteType" value="24900" data-label="Корпоративный сайт" data-i18n-label="calc_type_corporate">
@@ -418,7 +418,7 @@
                     <div class="option-title" data-i18n="calc_type_corporate">Корпоративный сайт</div>
                     <div class="option-desc" data-i18n="calc_type_corporate_desc">Многостраничный сайт компании с основными разделами</div>
                   </div>
-                  <span class="option-price">от $249</span>
+                <span class="option-price"><span data-i18n="calc_price_from">от</span> $249</span>
                 </label>
                 <label class="radio-option">
                   <input type="radio" name="siteType" value="49900" data-label="Интернет-магазин" data-i18n-label="calc_type_shop">
@@ -426,7 +426,7 @@
                     <div class="option-title" data-i18n="calc_type_shop">Интернет-магазин</div>
                     <div class="option-desc" data-i18n="calc_type_shop_desc">Сайт с каталогом товаров и системой заказов</div>
                   </div>
-                  <span class="option-price">от $499</span>
+                <span class="option-price"><span data-i18n="calc_price_from">от</span> $499</span>
                 </label>
                 <label class="radio-option">
                   <input type="radio" name="siteType" value="89900" data-label="Веб-приложение" data-i18n-label="calc_type_app">
@@ -434,7 +434,7 @@
                     <div class="option-title" data-i18n="calc_type_app">Веб-приложение</div>
                     <div class="option-desc" data-i18n="calc_type_app_desc">Сложное приложение с личным кабинетом и функционалом</div>
                   </div>
-                  <span class="option-price">от $899</span>
+                <span class="option-price"><span data-i18n="calc_price_from">от</span> $899</span>
                 </label>
               </div>
             </div>
@@ -444,11 +444,11 @@
           <div class="calculator-section">
             <h3 data-i18n="calc_section2_title">2. Количество страниц</h3>
             <div class="form-group">
-              <input type="range" class="range-input" id="pagesCount" min="1" max="50" value="1" step="1">
+              <input type="range" class="range-input" id="pagesCount" min="1" max="25" value="1" step="1">
               <div class="range-value">
                 <span data-i18n="calc_pages_min">1 страница</span>
                 <span class="range-current"><span id="pagesValue">5</span> <span data-i18n="calc_pages_suffix">страниц</span></span>
-                <span data-i18n="calc_pages_max">50 страниц</span>
+                <span data-i18n="calc_pages_max">25 страниц</span>
               </div>
             </div>
           </div>
@@ -757,7 +757,8 @@
       const featuresLabel = document.getElementById('featuresLabel');
       if (breakdown.features.length > 0) {
         featuresItem.style.display = 'flex';
-        featuresLabel.textContent = breakdown.features.length + ' опций';
+        const optionsWord = currentLang === 'en' ? 'options' : 'опций';
+        featuresLabel.textContent = breakdown.features.length + ' ' + optionsWord;
       } else {
         featuresItem.style.display = 'none';
       }
@@ -767,7 +768,8 @@
       const integrationsLabel = document.getElementById('integrationsLabel');
       if (breakdown.integrations.length > 0) {
         integrationsItem.style.display = 'flex';
-        integrationsLabel.textContent = breakdown.integrations.length + ' интеграций';
+        const integrationsWord = currentLang === 'en' ? 'integrations' : 'интеграций';
+        integrationsLabel.textContent = breakdown.integrations.length + ' ' + integrationsWord;
       } else {
         integrationsItem.style.display = 'none';
       }
@@ -777,7 +779,8 @@
       const seoLabel = document.getElementById('seoLabel');
       if (breakdown.seo.length > 0) {
         seoItem.style.display = 'flex';
-        seoLabel.textContent = breakdown.seo.length + ' опций';
+        const optionsWord = currentLang === 'en' ? 'options' : 'опций';
+        seoLabel.textContent = breakdown.seo.length + ' ' + optionsWord;
       } else {
         seoItem.style.display = 'none';
       }
