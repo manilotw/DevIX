@@ -18,6 +18,7 @@ function getCurrentLang() {
   return 'ru';
 }
 
+const TRANSLATIONS_VERSION = '20260131';
 let currentLang = getCurrentLang();
 let translations = {};
 
@@ -33,7 +34,7 @@ function initTranslator() {
 }
 
 function loadTranslations(lang) {
-  fetch(`/static/js/${lang}.json`)
+  fetch(`/static/js/${lang}.json?v=${TRANSLATIONS_VERSION}`)
     .then(response => {
       if (!response.ok) {
         console.error('Failed to load translations:', response.status);
