@@ -1,0 +1,829 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DevIX | Калькулятор Стоимости</title>
+  <meta name="description" content="Рассчитайте примерную стоимость разработки вашего сайта с помощью нашего калькулятора.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+
+  <!-- Stylesheet -->
+  <!-- Hide content until translations are loaded -->
+  <script>
+    document.documentElement.style.visibility = 'hidden';
+    document.documentElement.style.opacity = '0';
+  </script>
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=5">
+  
+  <!-- Sync Translation Loader -->
+  <script>
+    (function() {
+      let lang = localStorage.getItem('lang');
+      if (!lang || (lang !== 'en' && lang !== 'ru')) {
+        const path = window.location.pathname;
+        lang = path.startsWith('/en') ? 'en' : 'ru';
+      }
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `/static/js/${lang}.json`, false);
+        xhr.send();
+        if (xhr.status === 200) {
+          window.translations = JSON.parse(xhr.responseText);
+          window.currentLang = lang;
+          
+          // Обновляем title страницы сразу
+          const titleKey = 'page_title_calculator';
+          if (window.translations[titleKey]) {
+            document.title = window.translations[titleKey];
+          }
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            applyTranslations();
+          });
+        }
+      } catch (e) {
+        console.error('Failed to load translations:', e);
+      }
+      function applyTranslations() {
+        if (!window.translations) return;
+        const t = window.translations;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+          const key = el.getAttribute('data-i18n');
+          if (t[key]) el.textContent = t[key];
+        });
+        document.querySelectorAll('[data-i18n-html]').forEach(el => {
+          const key = el.getAttribute('data-i18n-html');
+          if (t[key]) el.innerHTML = t[key];
+        });
+        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+          const key = el.getAttribute('data-i18n-placeholder');
+          if (t[key]) el.placeholder = t[key];
+        });
+        document.querySelectorAll('[data-i18n-label]').forEach(el => {
+          const key = el.getAttribute('data-i18n-label');
+          if (t[key]) el.setAttribute('data-label', t[key]);
+        });
+        
+        // Показываем контент после применения переводов
+        document.documentElement.style.visibility = 'visible';
+        document.documentElement.style.opacity = '1';
+      }
+    })();
+  </script>
+  
+  <!-- Language Translator Script -->
+  <script src="{% static 'js/translator.js' %}"></script>
+  
+  <style>
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .calculator-section {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .calculator-section:nth-child(1) { animation-delay: 0.1s; }
+    .calculator-section:nth-child(2) { animation-delay: 0.2s; }
+    .calculator-section:nth-child(3) { animation-delay: 0.3s; }
+    .calculator-section:nth-child(4) { animation-delay: 0.4s; }
+    .calculator-section:nth-child(5) { animation-delay: 0.5s; }
+    .calculator-section:nth-child(6) { animation-delay: 0.6s; }
+
+    .price-summary {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards 0.7s;
+    }
+
+    .calculator-container > div > .hero-badge,
+    .calculator-container > div > h1,
+    .calculator-container > div > p {
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeInUp 0.8s ease forwards;
+    }
+
+    .calculator-container > div > h1 {
+      animation-delay: 0s;
+    }
+
+    .calculator-container > div > p {
+      animation-delay: 0s;
+    }
+
+    .calculator-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .calculator-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 968px) {
+      .calculator-grid {
+        flex-direction: column;
+      }
+    }
+
+    .calculator-section {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+    }
+
+    .calculator-section h3 {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      color: var(--color-text);
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--color-text-secondary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .radio-group, .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .radio-option, .checkbox-option {
+      display: flex;
+      align-items: center;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .radio-option:hover, .checkbox-option:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .radio-option input[type="radio"],
+    .checkbox-option input[type="checkbox"] {
+      margin-right: 12px;
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    .radio-option.selected, .checkbox-option.selected {
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .option-content {
+      flex: 1;
+    }
+
+    .option-title {
+      font-weight: 600;
+      color: var(--color-text);
+      margin-bottom: 4px;
+    }
+
+    .option-desc {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+    }
+
+    .option-price {
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 700;
+      margin-left: 10px;
+    }
+
+    .range-input {
+      width: 100%;
+      height: 8px;
+      border-radius: 5px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+
+    .range-input::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+    }
+
+    .range-input::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      cursor: pointer;
+      border: none;
+    }
+
+    .range-value {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      font-size: 0.9rem;
+      color: var(--color-text-secondary);
+    }
+
+    .range-current {
+      color: rgba(255, 255, 255, 0.9);
+      font-weight: 700;
+    }
+
+    .price-summary {
+      position: relative;
+      top: 0;
+      background: rgba(255, 255, 255, 0.03);
+      border: 2px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 40px;
+      height: auto;
+      margin-top: 60px;
+      text-align: center;
+    }
+
+    .price-summary h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .price-breakdown {
+      margin-bottom: 20px;
+    }
+
+    .price-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 0.95rem;
+    }
+
+    .price-item:last-child {
+      border-bottom: none;
+    }
+
+    .price-item-label {
+      color: var(--color-text-secondary);
+    }
+
+    .price-item-value {
+      color: var(--color-text);
+      font-weight: 600;
+    }
+
+    .total-price {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 2px solid rgba(255, 255, 255, 0.2);
+      text-align: center;
+    }
+
+    .total-label {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      margin-bottom: 10px;
+    }
+
+    .total-amount {
+      font-size: 4.5rem;
+      font-weight: 900;
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+      line-height: 1;
+    }
+
+    .price-note {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      text-align: center;
+      margin-top: 15px;
+      line-height: 1.5;
+    }
+
+    .cta-button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 16px;
+      background: linear-gradient(135deg, #7c3aed 0%, #6366f1 100%);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .cta-button:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particles"></canvas>
+
+  <!-- 3D Perspective Grid -->
+  <div class="perspective-grid"></div>
+
+  <!-- Header -->
+  {% include 'partials/header.html' %}
+
+  <!-- CALCULATOR SECTION -->
+  <section class="hero" style="min-height: auto; padding: 100px 20px 60px;">
+    <div class="purple-glow" style="top: 10%; left: 20%;"></div>
+    <div class="purple-glow" style="bottom: 20%; right: 15%;"></div>
+
+    <div class="calculator-container">
+      <div style="text-align: center; margin-bottom: 40px;">
+        <div class="hero-badge" data-i18n="calc_badge">💰 Калькулятор Стоимости</div>
+        <h1 style="font-size: clamp(2rem, 6vw, 3.5rem); margin: 20px 0;">
+          <span data-i18n="calc_title1">Рассчитайте стоимость</span> <br>
+          <span class="gradient-text" data-i18n="calc_title2">вашего проекта</span>
+        </h1>
+        <p style="color: var(--color-text-secondary); font-size: 1.1rem; max-width: 700px; margin: 0 auto;" data-i18n="calc_subtitle">
+          Ответьте на несколько вопросов, и мы покажем примерную стоимость разработки вашего сайта
+        </p>
+      </div>
+
+      <div class="calculator-grid">
+        <!-- Full Width - Form -->
+        <div>
+          <!-- Тип сайта -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section1_title">1. Тип сайта</h3>
+            <div class="form-group">
+              <div class="radio-group" id="siteType">
+                <label class="radio-option">
+                  <input type="radio" name="siteType" value="9900" data-label="Лендинг" data-i18n-label="calc_type_landing" checked>
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_type_landing">Лендинг (Landing Page)</div>
+                    <div class="option-desc" data-i18n="calc_type_landing_desc">Одностраничный сайт для продукта или услуги</div>
+                  </div>
+                  <span class="option-price">от $99</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="siteType" value="24900" data-label="Корпоративный сайт" data-i18n-label="calc_type_corporate">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_type_corporate">Корпоративный сайт</div>
+                    <div class="option-desc" data-i18n="calc_type_corporate_desc">Многостраничный сайт компании с основными разделами</div>
+                  </div>
+                  <span class="option-price">от $249</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="siteType" value="49900" data-label="Интернет-магазин" data-i18n-label="calc_type_shop">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_type_shop">Интернет-магазин</div>
+                    <div class="option-desc" data-i18n="calc_type_shop_desc">Сайт с каталогом товаров и системой заказов</div>
+                  </div>
+                  <span class="option-price">от $499</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="siteType" value="89900" data-label="Веб-приложение" data-i18n-label="calc_type_app">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_type_app">Веб-приложение</div>
+                    <div class="option-desc" data-i18n="calc_type_app_desc">Сложное приложение с личным кабинетом и функционалом</div>
+                  </div>
+                  <span class="option-price">от $899</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Количество страниц -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section2_title">2. Количество страниц</h3>
+            <div class="form-group">
+              <input type="range" class="range-input" id="pagesCount" min="1" max="50" value="1" step="1">
+              <div class="range-value">
+                <span data-i18n="calc_pages_min">1 страница</span>
+                <span class="range-current"><span id="pagesValue">5</span> <span data-i18n="calc_pages_suffix">страниц</span></span>
+                <span data-i18n="calc_pages_max">50 страниц</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Дизайн -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section3_title">3. Дизайн</h3>
+            <div class="form-group">
+              <div class="radio-group" id="designType">
+                <label class="radio-option">
+                  <input type="radio" name="designType" value="0" data-label="Готовый шаблон" data-i18n-label="calc_design_template" checked>
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_design_template">Готовый шаблон</div>
+                    <div class="option-desc" data-i18n="calc_design_template_desc">Адаптация готового дизайна под ваш бренд</div>
+                  </div>
+                  <span class="option-price">$0</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="designType" value="14900" data-label="Уникальный дизайн" data-i18n-label="calc_design_unique">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_design_unique">Уникальный дизайн</div>
+                    <div class="option-desc" data-i18n="calc_design_unique_desc">Разработка индивидуального дизайна с нуля</div>
+                  </div>
+                  <span class="option-price">+$149</span>
+                </label>
+                <label class="radio-option">
+                  <input type="radio" name="designType" value="29900" data-label="Премиум дизайн" data-i18n-label="calc_design_premium">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_design_premium">Премиум дизайн</div>
+                    <div class="option-desc" data-i18n="calc_design_premium_desc">Эксклюзивный дизайн с анимациями и UX-исследованием</div>
+                  </div>
+                  <span class="option-price">+$299</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Функционал -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section4_title">4. Дополнительный функционал</h3>
+            <div class="form-group">
+              <div class="checkbox-group" id="features">
+                <label class="checkbox-option">
+                  <input type="checkbox" value="2900" data-label="Контактные формы" data-i18n-label="calc_feature_forms">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_forms">Контактные формы</div>
+                    <div class="option-desc" data-i18n="calc_feature_forms_desc">Формы обратной связи и заявок</div>
+                  </div>
+                  <span class="option-price">+$29</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="9900" data-label="CMS система" data-i18n-label="calc_feature_cms">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_cms">CMS (Система управления)</div>
+                    <div class="option-desc" data-i18n="calc_feature_cms_desc">Админ-панель для управления контентом</div>
+                  </div>
+                  <span class="option-price">+$99</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="6900" data-label="Блог/Новости" data-i18n-label="calc_feature_blog">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_blog">Блог / Новости</div>
+                    <div class="option-desc" data-i18n="calc_feature_blog_desc">Раздел с публикациями и статьями</div>
+                  </div>
+                  <span class="option-price">+$69</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="4900" data-label="Мультиязычность" data-i18n-label="calc_feature_multilang">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_multilang">Мультиязычность</div>
+                    <div class="option-desc" data-i18n="calc_feature_multilang_desc">Поддержка нескольких языков</div>
+                  </div>
+                  <span class="option-price">+$49</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="14900" data-label="Личный кабинет" data-i18n-label="calc_feature_account">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_account">Личный кабинет</div>
+                    <div class="option-desc" data-i18n="calc_feature_account_desc">Регистрация и авторизация пользователей</div>
+                  </div>
+                  <span class="option-price">+$149</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="7900" data-label="Поиск по сайту" data-i18n-label="calc_feature_search">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_feature_search">Поиск по сайту</div>
+                    <div class="option-desc" data-i18n="calc_feature_search_desc">Умный поиск с фильтрацией</div>
+                  </div>
+                  <span class="option-price">+$79</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Интеграции -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section5_title">5. Интеграции</h3>
+            <div class="form-group">
+              <div class="checkbox-group" id="integrations">
+                <label class="checkbox-option">
+                  <input type="checkbox" value="9900" data-label="Платежные системы" data-i18n-label="calc_integration_payment">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_integration_payment">Платежные системы</div>
+                    <div class="option-desc" data-i18n="calc_integration_payment_desc">Прием онлайн-платежей (Stripe, PayPal и др.)</div>
+                  </div>
+                  <span class="option-price">+$99</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="6900" data-label="CRM интеграция" data-i18n-label="calc_integration_crm">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_integration_crm">CRM интеграция</div>
+                    <div class="option-desc" data-i18n="calc_integration_crm_desc">Подключение к вашей CRM системе</div>
+                  </div>
+                  <span class="option-price">+$69</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="4900" data-label="Email-рассылки" data-i18n-label="calc_integration_email">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_integration_email">Email-рассылки</div>
+                    <div class="option-desc" data-i18n="calc_integration_email_desc">MailChimp, SendGrid и др.</div>
+                  </div>
+                  <span class="option-price">+$49</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="7900" data-label="Внешние API" data-i18n-label="calc_integration_api">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_integration_api">Внешние API</div>
+                    <div class="option-desc" data-i18n="calc_integration_api_desc">Интеграция со сторонними сервисами</div>
+                  </div>
+                  <span class="option-price">+$79</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="3900" data-label="Социальные сети" data-i18n-label="calc_integration_social">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_integration_social">Социальные сети</div>
+                    <div class="option-desc" data-i18n="calc_integration_social_desc">Интеграция с Facebook, Instagram, VK</div>
+                  </div>
+                  <span class="option-price">+$39</span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- SEO и оптимизация -->
+          <div class="calculator-section">
+            <h3 data-i18n="calc_section6_title">6. SEO и оптимизация</h3>
+            <div class="form-group">
+              <div class="checkbox-group" id="seo">
+                <label class="checkbox-option">
+                  <input type="checkbox" value="6900" data-label="Базовое SEO" data-i18n-label="calc_seo_basic" checked>
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_seo_basic">Базовое SEO</div>
+                    <div class="option-desc" data-i18n="calc_seo_basic_desc">Настройка мета-тегов, sitemap, robots.txt</div>
+                  </div>
+                  <span class="option-price">+$69</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="9900" data-label="Оптимизация скорости" data-i18n-label="calc_seo_speed">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_seo_speed">Оптимизация скорости</div>
+                    <div class="option-desc" data-i18n="calc_seo_speed_desc">Сжатие, кэширование, CDN</div>
+                  </div>
+                  <span class="option-price">+$99</span>
+                </label>
+                <label class="checkbox-option">
+                  <input type="checkbox" value="4900" data-label="Google Analytics" data-i18n-label="calc_seo_analytics">
+                  <div class="option-content">
+                    <div class="option-title" data-i18n="calc_seo_analytics">Аналитика</div>
+                    <div class="option-desc" data-i18n="calc_seo_analytics_desc">Google Analytics, Яндекс.Метрика</div>
+                  </div>
+                  <span class="option-price">+$49</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom - Price Summary -->
+        <div>
+          <div class="price-summary">
+            <h3 data-i18n="calc_summary_title">Итоговая смета</h3>
+            
+            <div class="price-breakdown" id="priceBreakdown">
+              <div class="price-item">
+                <span class="price-item-label" data-i18n="calc_summary_type">Тип сайта:</span>
+                <span class="price-item-value" id="siteTypeLabel" data-i18n="calc_type_corporate">Корпоративный сайт</span>
+              </div>
+              <div class="price-item">
+                <span class="price-item-label" data-i18n="calc_summary_pages">Количество страниц:</span>
+                <span class="price-item-value" id="pagesLabel">5 × $20</span>
+              </div>
+              <div class="price-item">
+                <span class="price-item-label" data-i18n="calc_summary_design">Дизайн:</span>
+                <span class="price-item-value" id="designLabel" data-i18n="calc_design_unique">Уникальный дизайн</span>
+              </div>
+              <div class="price-item" id="featuresItem" style="display: none;">
+                <span class="price-item-label" data-i18n="calc_summary_features">Функционал:</span>
+                <span class="price-item-value" id="featuresLabel">—</span>
+              </div>
+              <div class="price-item" id="integrationsItem" style="display: none;">
+                <span class="price-item-label" data-i18n="calc_summary_integrations">Интеграции:</span>
+                <span class="price-item-value" id="integrationsLabel">—</span>
+              </div>
+              <div class="price-item" id="seoItem" style="display: none;">
+                <span class="price-item-label" data-i18n="calc_summary_seo">SEO/Оптимизация:</span>
+                <span class="price-item-value" id="seoLabel">—</span>
+              </div>
+            </div>
+
+            <div class="total-price">
+              <div class="total-label" data-i18n="calc_total_label">Примерная стоимость</div>
+              <div class="total-amount" id="totalAmount">$650</div>
+              <button class="cta-button" onclick="window.open('https://wa.me/77064207712?text=Добрый%20день!%20Мне%20нужна%20помощь%20с%20расчетом%20стоимости%20проекта.', '_blank')" data-i18n="calc_total_btn">Получить точный расчет</button>
+            </div>
+
+            <p class="price-note" data-i18n="calc_total_note">
+              * Это примерная оценка. Точная стоимость будет определена после детального обсуждения вашего проекта.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  {% include 'partials/footer.html' %}
+
+  <!-- JavaScript -->
+  <script src="{% static 'js/script.js' %}?v=2"></script>
+  
+  <script>
+    // Калькулятор логика
+    function calculatePrice() {
+      let total = 0;
+      let breakdown = {
+        siteType: 0,
+        siteTypeLabel: '',
+        pages: 0,
+        design: 0,
+        designLabel: '',
+        features: [],
+        integrations: [],
+        seo: []
+      };
+
+      // Тип сайта
+      const siteType = document.querySelector('input[name="siteType"]:checked');
+      if (siteType) {
+        breakdown.siteType = parseInt(siteType.value);
+        breakdown.siteTypeLabel = siteType.getAttribute('data-label');
+        total += breakdown.siteType;
+      }
+
+      // Количество страниц
+      const pagesCount = parseInt(document.getElementById('pagesCount').value);
+      breakdown.pages = pagesCount * 2000; // $20 за страницу
+      total += breakdown.pages;
+
+      // Дизайн
+      const designType = document.querySelector('input[name="designType"]:checked');
+      if (designType) {
+        breakdown.design = parseInt(designType.value);
+        breakdown.designLabel = designType.getAttribute('data-label');
+        total += breakdown.design;
+      }
+
+      // Функционал
+      document.querySelectorAll('#features input[type="checkbox"]:checked').forEach(checkbox => {
+        const value = parseInt(checkbox.value);
+        const label = checkbox.getAttribute('data-label');
+        breakdown.features.push({ label, value });
+        total += value;
+      });
+
+      // Интеграции
+      document.querySelectorAll('#integrations input[type="checkbox"]:checked').forEach(checkbox => {
+        const value = parseInt(checkbox.value);
+        const label = checkbox.getAttribute('data-label');
+        breakdown.integrations.push({ label, value });
+        total += value;
+      });
+
+      // SEO
+      document.querySelectorAll('#seo input[type="checkbox"]:checked').forEach(checkbox => {
+        const value = parseInt(checkbox.value);
+        const label = checkbox.getAttribute('data-label');
+        breakdown.seo.push({ label, value });
+        total += value;
+      });
+
+      updateUI(total, breakdown, pagesCount);
+    }
+
+    function updateUI(total, breakdown, pagesCount) {
+      // Обновление итоговой суммы
+      document.getElementById('totalAmount').textContent = '$' + (total / 100).toLocaleString();
+
+      // Обновление деталей
+      document.getElementById('siteTypeLabel').textContent = breakdown.siteTypeLabel;
+      document.getElementById('pagesLabel').textContent = `${pagesCount} × $20`;
+      document.getElementById('pagesValue').textContent = pagesCount;
+      document.getElementById('designLabel').textContent = breakdown.designLabel;
+
+      // Функционал
+      const featuresItem = document.getElementById('featuresItem');
+      const featuresLabel = document.getElementById('featuresLabel');
+      if (breakdown.features.length > 0) {
+        featuresItem.style.display = 'flex';
+        featuresLabel.textContent = breakdown.features.length + ' опций';
+      } else {
+        featuresItem.style.display = 'none';
+      }
+
+      // Интеграции
+      const integrationsItem = document.getElementById('integrationsItem');
+      const integrationsLabel = document.getElementById('integrationsLabel');
+      if (breakdown.integrations.length > 0) {
+        integrationsItem.style.display = 'flex';
+        integrationsLabel.textContent = breakdown.integrations.length + ' интеграций';
+      } else {
+        integrationsItem.style.display = 'none';
+      }
+
+      // SEO
+      const seoItem = document.getElementById('seoItem');
+      const seoLabel = document.getElementById('seoLabel');
+      if (breakdown.seo.length > 0) {
+        seoItem.style.display = 'flex';
+        seoLabel.textContent = breakdown.seo.length + ' опций';
+      } else {
+        seoItem.style.display = 'none';
+      }
+    }
+
+    // Визуальное выделение выбранных опций
+    function updateOptionStyles() {
+      document.querySelectorAll('.radio-option').forEach(option => {
+        const radio = option.querySelector('input[type="radio"]');
+        if (radio.checked) {
+          option.classList.add('selected');
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+
+      document.querySelectorAll('.checkbox-option').forEach(option => {
+        const checkbox = option.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+          option.classList.add('selected');
+        } else {
+          option.classList.remove('selected');
+        }
+      });
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Слушатели для всех input элементов
+      document.querySelectorAll('input[type="radio"], input[type="checkbox"], input[type="range"]').forEach(input => {
+        input.addEventListener('change', function() {
+          calculatePrice();
+          updateOptionStyles();
+        });
+        input.addEventListener('input', function() {
+          if (input.type === 'range') {
+            calculatePrice();
+          }
+        });
+      });
+
+      // Инициализация
+      calculatePrice();
+      updateOptionStyles();
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - AmirzhanFree</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Particle Canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- LOGIN CONTAINER -->
+    <div class="login-wrapper">
+        <div class="login-container">
+            <!-- LEFT SIDE - BRANDING -->
+            <div class="login-left">
+                <div class="login-brand">
+                    <span class="gradient-text" style="font-size: 2rem; font-weight: 800;">AmirzhanFree</span>
+                </div>
+
+                <h2 style="font-size: 2.5rem; margin: 2rem 0 1rem;">
+                    Welcome back to the future of SEO
+                </h2>
+
+                <p style="color: var(--color-text-secondary); font-size: 1.125rem; line-height: 1.7;">
+                    Track rankings, analyze competitors, and grow your organic traffic with AI-powered insights.
+                </p>
+
+                <div class="login-stats">
+                    <div class="login-stat">
+                        <div class="login-stat-value">10M+</div>
+                        <div class="login-stat-label">Keywords Tracked</div>
+                    </div>
+                    <div class="login-stat">
+                        <div class="login-stat-value">50K+</div>
+                        <div class="login-stat-label">Happy Users</div>
+                    </div>
+                    <div class="login-stat">
+                        <div class="login-stat-value">99.9%</div>
+                        <div class="login-stat-label">Uptime</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT SIDE - LOGIN FORM -->
+            <div class="login-right">
+                <div class="login-form-container">
+                    <div class="login-form-header">
+                        <h3 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Sign in to your account</h3>
+                        <p style="color: var(--color-text-secondary); margin-bottom: 2rem;">
+                            Don't have an account? <a href="#"
+                                style="color: var(--color-accent-primary); text-decoration: none;">Sign up</a>
+                        </p>
+                    </div>
+
+                    <!-- SOCIAL LOGIN -->
+                    <div class="social-login">
+                        <button class="social-btn">
+                            <span style="font-size: 1.25rem;">G</span>
+                            <span>Continue with Google</span>
+                        </button>
+                        <button class="social-btn">
+                            <span style="font-size: 1.25rem;">⚫</span>
+                            <span>Continue with GitHub</span>
+                        </button>
+                    </div>
+
+                    <div class="divider">
+                        <span>or continue with email</span>
+                    </div>
+
+                    <!-- LOGIN FORM -->
+                    <form class="login-form">
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" id="email" class="form-input" placeholder="you@example.com" required>
+                        </div>
+
+                        <div class="form-group">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <label for="password">Password</label>
+                                <a href="#"
+                                    style="font-size: 0.875rem; color: var(--color-accent-primary); text-decoration: none;">Forgot
+                                    password?</a>
+                            </div>
+                            <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" class="checkbox-input">
+                                <span>Remember me for 30 days</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
+                            Sign in
+                        </button>
+                    </form>
+
+                    <!-- FOOTER -->
+                    <div class="login-footer">
+                        <p style="font-size: 0.875rem; color: var(--color-text-muted); text-align: center;">
+                            Protected by enterprise-grade security and encryption
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACK TO HOME -->
+        <a href="index.html" class="back-home">
+            ← Back to home
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Login form handler
+        document.querySelector('.login-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+
+            if (email) {
+                alert('✓ Login successful!\\n\\nRedirecting to dashboard...');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1000);
+            }
+        });
+    </script>
+</body>
+
+</html>

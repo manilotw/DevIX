@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test - DevIX Header/Footer Loading</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="loader.js"></script>
+</head>
+<body>
+  <!-- Particle Canvas -->
+  <canvas id="particles"></canvas>
+
+  <!-- 3D Perspective Grid -->
+  <div class="perspective-grid"></div>
+
+  <!-- Header будет загружен здесь -->
+  <div id="header-container"></div>
+
+  <!-- TEST CONTENT -->
+  <section class="hero" style="padding: 100px 20px;">
+    <div class="container">
+      <h1 style="text-align: center; margin-bottom: 20px;">Тестовая страница</h1>
+      <p style="text-align: center; color: var(--color-text-muted);">
+        Header и Footer должны загружаться из base.html
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer будет загружен здесь -->
+  <div id="footer-container"></div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>

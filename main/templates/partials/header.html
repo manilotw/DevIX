@@ -1,0 +1,132 @@
+{% load static %}
+<header class="sticky-header">
+  <div class="container" style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+    <!-- Logo -->
+    <a href="/" class="logo" style="display: flex; align-items: center; gap: 0.75rem; text-decoration: none; flex-shrink: 0;">
+      <img src="{% static 'img/devixsvg.svg' %}" alt="DevIX" style="height: 40px; width: auto;">
+      <span class="gradient-text" style="font-size: 1.25rem; font-weight: 800;">DevIX</span>
+    </a>
+    
+    <!-- Desktop Navigation (hidden on mobile via CSS) -->
+    <nav class="nav-content" id="navContent" style="flex-grow: 1; margin: 0 2rem; display: flex;">
+      <div class="nav-links">
+        <a href="/" data-i18n="nav_home" style="margin: 0; padding: 0; border: none;">Главная</a>
+        <a href="/aboutus" data-i18n="nav_about" style="margin: 0; padding: 0; border: none;">О нас</a>
+        <a href="/portfolio" data-i18n="nav_portfolio" style="margin: 0; padding: 0; border: none;">Портфолио</a>
+        <a href="/calculator" data-i18n="nav_pricing" style="margin: 0; padding: 0; border: none;">Стоимость</a>
+        <a href="/#faq" data-i18n="nav_faq" style="margin: 0; padding: 0; border: none;">ЧаВО</a>
+        <a href="/telegram-bots" data-i18n="nav_telegram" style="margin: 0; padding: 0; border: none;">Telegram Боты</a>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" style="display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; z-index: 1000;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Language Selector -->
+    <div style="display: flex; gap: 0.5rem; flex-shrink: 0;">
+      <button class="lang-selector-btn" data-lang="ru" onclick="switchLanguage('ru')">РУ</button>
+      <button class="lang-selector-btn" data-lang="en" onclick="switchLanguage('en')">EN</button>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Немедленно определяем язык и применяем стили ДО рендера
+  (function() {
+    let lang = localStorage.getItem('lang');
+    if (!lang || (lang !== 'en' && lang !== 'ru')) {
+      const path = window.location.pathname;
+      lang = path.startsWith('/en') ? 'en' : 'ru';
+    }
+    
+    // Сохраняем для использования в других скриптах
+    window.__currentLang = lang;
+    
+    // Добавляем стили для кнопок
+    const style = document.createElement('style');
+    if (lang === 'ru') {
+      style.textContent = `
+        button[data-lang="ru"] { background: rgba(139, 92, 246, 0.4) !important; border-color: rgba(139, 92, 246, 0.8) !important; color: #e9d5ff !important; font-weight: 600 !important; }
+        button[data-lang="en"] { background: rgba(139, 92, 246, 0.1) !important; border-color: rgba(139, 92, 246, 0.3) !important; color: #d8b4fe !important; font-weight: 500 !important; }
+      `;
+    } else {
+      style.textContent = `
+        button[data-lang="en"] { background: rgba(139, 92, 246, 0.4) !important; border-color: rgba(139, 92, 246, 0.8) !important; color: #e9d5ff !important; font-weight: 600 !important; }
+        button[data-lang="ru"] { background: rgba(139, 92, 246, 0.1) !important; border-color: rgba(139, 92, 246, 0.3) !important; color: #d8b4fe !important; font-weight: 500 !important; }
+      `;
+    }
+    document.head.appendChild(style);
+  })();
+</script>
+
+<script>
+  // Mobile Menu Functionality
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navContent = document.getElementById('navContent');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    if (!mobileMenuToggle || !navContent) return;
+
+    // Toggle menu on button click
+    mobileMenuToggle.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const isOpen = navContent.classList.contains('open');
+      
+      if (!isOpen) {
+        navContent.classList.add('open');
+        mobileMenuToggle.classList.add('active');
+      } else {
+        closeMenu();
+      }
+    });
+
+    // Close menu when clicking on links
+    navLinks.forEach(link => {
+      link.addEventListener('click', function() {
+        closeMenu();
+      });
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const isClickInsideNav = navContent.contains(event.target);
+      const isClickOnToggle = mobileMenuToggle.contains(event.target);
+      
+      if (!isClickInsideNav && !isClickOnToggle && navContent.classList.contains('open')) {
+        closeMenu();
+      }
+    });
+
+    function closeMenu() {
+      navContent.classList.remove('open');
+      mobileMenuToggle.classList.remove('active');
+    }
+  });
+
+  // Highlight Active Link
+  function highlightActiveLink() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    const currentPath = window.location.pathname.split('?')[0];
+    
+    navLinks.forEach(link => {
+      link.classList.remove('active');
+      const href = link.getAttribute('href');
+      
+      if (href === currentPath) {
+        link.classList.add('active');
+      } else if (currentPath === '/' && href === '/') {
+        link.classList.add('active');
+      }
+    });
+  }
+  
+  document.addEventListener('DOMContentLoaded', highlightActiveLink);
+  window.addEventListener('pageshow', highlightActiveLink);
+</script>

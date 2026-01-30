@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - AmirzhanFree</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- DASHBOARD SIDEBAR -->
+    <aside class="dashboard-sidebar">
+        <div class="sidebar-header">
+            <span class="gradient-text" style="font-size: 1.25rem; font-weight: 800;">AmirzhanFree</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="sidebar-item active">
+                <span class="sidebar-icon">📊</span>
+                <span>Overview</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <span class="sidebar-icon">🔍</span>
+                <span>Keywords</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <span class="sidebar-icon">🔗</span>
+                <span>Backlinks</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <span class="sidebar-icon">👥</span>
+                <span>Competitors</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <span class="sidebar-icon">📈</span>
+                <span>Reports</span>
+            </a>
+            <a href="#" class="sidebar-item">
+                <span class="sidebar-icon">⚙️</span>
+                <span>Settings</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-avatar">AM</div>
+                <div class="user-info">
+                    <div class="user-name">Amir M.</div>
+                    <div class="user-plan">Pro Plan</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT -->
+    <main class="dashboard-main">
+        <!-- TOP BAR -->
+        <header class="dashboard-header">
+            <div class="dashboard-search">
+                <span style="opacity: 0.5;">🔍 Search keywords, domains...</span>
+            </div>
+
+            <div class="dashboard-actions">
+                <button class="icon-btn">🔔</button>
+                <button class="icon-btn">👤</button>
+            </div>
+        </header>
+
+        <!-- DASHBOARD CONTENT -->
+        <div class="dashboard-content">
+            <!-- WELCOME SECTION -->
+            <div class="dashboard-welcome">
+                <div>
+                    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Welcome back, Amir! 👋</h1>
+                    <p style="color: var(--color-text-secondary);">Here's what's happening with your websites today</p>
+                </div>
+                <button class="btn btn-primary">Add Website</button>
+            </div>
+
+            <!-- STATS GRID -->
+            <div class="stats-grid-dashboard">
+                <div class="stat-card-dashboard">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Organic Traffic</span>
+                        <span class="stat-icon">📈</span>
+                    </div>
+                    <div class="stat-value">847,392</div>
+                    <div class="stat-change positive">↑ 23.4% from last month</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 40%;"></div>
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 80%;"></div>
+                        <div class="chart-bar" style="height: 65%;"></div>
+                        <div class="chart-bar" style="height: 90%;"></div>
+                        <div class="chart-bar" style="height: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card-dashboard">
+                    <div class="stat-header">
+                        <span class="stat-label">Average Position</span>
+                        <span class="stat-icon">🎯</span>
+                    </div>
+                    <div class="stat-value">4.2</div>
+                    <div class="stat-change positive">↑ 2.3 positions improved</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 80%;"></div>
+                        <div class="chart-bar" style="height: 70%;"></div>
+                        <div class="chart-bar" style="height: 60%;"></div>
+                        <div class="chart-bar" style="height: 50%;"></div>
+                        <div class="chart-bar" style="height: 40%;"></div>
+                        <div class="chart-bar" style="height: 35%;"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card-dashboard">
+                    <div class="stat-header">
+                        <span class="stat-label">Total Backlinks</span>
+                        <span class="stat-icon">🔗</span>
+                    </div>
+                    <div class="stat-value">2,847</div>
+                    <div class="stat-change positive">↑ 156 new this month</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 50%;"></div>
+                        <div class="chart-bar" style="height: 55%;"></div>
+                        <div class="chart-bar" style="height: 65%;"></div>
+                        <div class="chart-bar" style="height: 70%;"></div>
+                        <div class="chart-bar" style="height: 85%;"></div>
+                        <div class="chart-bar" style="height: 100%;"></div>
+                    </div>
+                </div>
+
+                <div class="stat-card-dashboard">
+                    <div class="stat-header">
+                        <span class="stat-label">Keywords Ranking</span>
+                        <span class="stat-icon">⭐</span>
+                    </div>
+                    <div class="stat-value">1,245</div>
+                    <div class="stat-change positive">↑ 89 new rankings</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 45%;"></div>
+                        <div class="chart-bar" style="height: 55%;"></div>
+                        <div class="chart-bar" style="height: 70%;"></div>
+                        <div class="chart-bar" style="height: 80%;"></div>
+                        <div class="chart-bar" style="height: 90%;"></div>
+                        <div class="chart-bar" style="height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WEBSITES LIST -->
+            <div class="dashboard-section">
+                <div class="section-header-dashboard">
+                    <h2>Your Websites</h2>
+                    <button class="btn btn-outline btn-small">View All</button>
+                </div>
+
+                <div class="websites-grid">
+                    <div class="website-card">
+                        <div class="website-header">
+                            <div class="website-favicon">E</div>
+                            <div>
+                                <div class="website-name">example.com</div>
+                                <div class="website-url">https://example.com</div>
+                            </div>
+                        </div>
+                        <div class="website-stats">
+                            <div class="website-stat">
+                                <span class="website-stat-label">Traffic</span>
+                                <span class="website-stat-value">124.5K</span>
+                            </div>
+                            <div class="website-stat">
+                                <span class="website-stat-label">Keywords</span>
+                                <span class="website-stat-value">487</span>
+                            </div>
+                            <div class="website-stat">
+                                <span class="website-stat-label">Position</span>
+                                <span class="website-stat-value">3.8</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">View Details</button>
+                    </div>
+
+                    <div class="website-card">
+                        <div class="website-header">
+                            <div class="website-favicon" style="background: linear-gradient(135deg, #06b6d4, #0ea5e9);">
+                                M</div>
+                            <div>
+                                <div class="website-name">mybusiness.io</div>
+                                <div class="website-url">https://mybusiness.io</div>
+                            </div>
+                        </div>
+                        <div class="website-stats">
+                            <div class="website-stat">
+                                <span class="website-stat-label">Traffic</span>
+                                <span class="website-stat-value">87.2K</span>
+                            </div>
+                            <div class="website-stat">
+                                <span class="website-stat-label">Keywords</span>
+                                <span class="website-stat-value">321</span>
+                            </div>
+                            <div class="website-stat">
+                                <span class="website-stat-label">Position</span>
+                                <span class="website-stat-value">5.2</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline" style="width: 100%; margin-top: 1rem;">View Details</button>
+                    </div>
+
+                    <div class="website-card add-website">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem; opacity: 0.3;">+</div>
+                            <div style="font-weight: 600; margin-bottom: 0.5rem;">Add Website</div>
+                            <div style="font-size: 0.875rem; color: var(--color-text-muted);">Track a new domain</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TOP KEYWORDS -->
+            <div class="dashboard-section">
+                <div class="section-header-dashboard">
+                    <h2>Top Performing Keywords</h2>
+                    <button class="btn btn-outline btn-small">See All</button>
+                </div>
+
+                <div class="keywords-table-dashboard">
+                    <div class="table-row-dashboard">
+                        <div class="keyword-info-dashboard">
+                            <span class="keyword-rank-dashboard" style="background: #ffffff; color: #000;">1</span>
+                            <div>
+                                <div class="keyword-text-dashboard">ai solutions for enterprise</div>
+                                <div class="keyword-url">example.com/solutions</div>
+                            </div>
+                        </div>
+                        <div class="keyword-metrics-dashboard">
+                            <span class="keyword-traffic-dashboard">12.4K</span>
+                            <span class="keyword-trend-dashboard positive">↑ 15%</span>
+                        </div>
+                    </div>
+
+                    <div class="table-row-dashboard">
+                        <div class="keyword-info-dashboard">
+                            <span class="keyword-rank-dashboard" style="background: #e5e5e5; color: #000;">3</span>
+                            <div>
+                                <div class="keyword-text-dashboard">digital transformation platform</div>
+                                <div class="keyword-url">example.com/platform</div>
+                            </div>
+                        </div>
+                        <div class="keyword-metrics-dashboard">
+                            <span class="keyword-traffic-dashboard">9.8K</span>
+                            <span class="keyword-trend-dashboard positive">↑ 8%</span>
+                        </div>
+                    </div>
+
+                    <div class="table-row-dashboard">
+                        <div class="keyword-info-dashboard">
+                            <span class="keyword-rank-dashboard" style="background: #a3a3a3; color: #000;">5</span>
+                            <div>
+                                <div class="keyword-text-dashboard">cloud infrastructure saas</div>
+                                <div class="keyword-url">example.com/cloud</div>
+                            </div>
+                        </div>
+                        <div class="keyword-metrics-dashboard">
+                            <span class="keyword-traffic-dashboard">7.2K</span>
+                            <span class="keyword-trend-dashboard positive">↑ 12%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

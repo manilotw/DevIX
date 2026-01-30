@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - AmirzhanFree</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Particle Canvas -->
+    <canvas id="particles"></canvas>
+
+    <!-- 3D Perspective Grid -->
+    <div class="perspective-grid"></div>
+
+    <!-- STICKY HEADER -->
+    <header class="sticky-header">
+        <div class="container">
+            <nav class="nav-content">
+                <div class="logo">
+                    <a href="index.html" style="text-decoration: none;">
+                        <span class="gradient-text" style="font-size: 1.25rem; font-weight: 800;">AmirzhanFree</span>
+                    </a>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html#features">Features</a>
+                    <a href="index.html#research">Research</a>
+                    <a href="pricing.html" class="active">Pricing</a>
+                    <a href="index.html#faq">FAQ</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="login.html" class="nav-link">Log in</a>
+                    <a href="dashboard.html" class="btn btn-primary btn-small">Get Started</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- PRICING HERO -->
+    <section class="hero" style="min-height: 60vh; padding-top: 120px;">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">💎 Simple, Transparent Pricing</div>
+
+                <h1 style="font-size: clamp(2.5rem, 8vw, 5rem);">
+                    Choose Your <span class="gradient-text">Plan</span>
+                </h1>
+
+                <p class="hero-subtitle" style="margin-bottom: 2rem;">
+                    Start free, scale as you grow. No hidden fees, no surprises.
+                </p>
+
+                <!-- Billing Toggle -->
+                <div class="billing-toggle">
+                    <span class="billing-option active">Monthly</span>
+                    <div class="toggle-switch">
+                        <input type="checkbox" id="billingSwitch">
+                        <label for="billingSwitch"></label>
+                    </div>
+                    <span class="billing-option">Yearly <span class="save-badge">Save 20%</span></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING CARDS -->
+    <section class="section relative" style="padding-top: 0;">
+        <div class="container">
+            <div class="pricing-grid">
+                <!-- FREE PLAN -->
+                <div class="pricing-card fade-in">
+                    <div class="pricing-header">
+                        <h3>Starter</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9375rem;">Perfect to get started</p>
+                    </div>
+
+                    <div class="pricing-price">
+                        <span class="price-amount">$0</span>
+                        <span class="price-period">/month</span>
+                    </div>
+
+                    <button class="btn btn-outline" style="width: 100%; margin: 2rem 0;">Start Free</button>
+
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>100 keyword tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>1 website</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Basic analytics</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Email support</span>
+                        </div>
+                        <div class="feature-item disabled">
+                            <span class="feature-icon">×</span>
+                            <span>API access</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRO PLAN (POPULAR) -->
+                <div class="pricing-card featured fade-in" style="transition-delay: 0.1s;">
+                    <div class="popular-badge">Most Popular</div>
+
+                    <div class="pricing-header">
+                        <h3>Professional</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9375rem;">For growing businesses</p>
+                    </div>
+
+                    <div class="pricing-price">
+                        <span class="price-amount">$49</span>
+                        <span class="price-period">/month</span>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: 100%; margin: 2rem 0;">Start 14-day Trial</button>
+
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>5,000 keyword tracking</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>10 websites</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Advanced analytics</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Priority support</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>API access</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Competitor analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ENTERPRISE PLAN -->
+                <div class="pricing-card fade-in" style="transition-delay: 0.2s;">
+                    <div class="pricing-header">
+                        <h3>Enterprise</h3>
+                        <p style="color: var(--color-text-muted); font-size: 0.9375rem;">For large organizations</p>
+                    </div>
+
+                    <div class="pricing-price">
+                        <span class="price-amount">Custom</span>
+                    </div>
+
+                    <button class="btn btn-outline" style="width: 100%; margin: 2rem 0;">Contact Sales</button>
+
+                    <div class="pricing-features">
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Unlimited keywords</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Unlimited websites</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Custom analytics</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>24/7 dedicated support</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Advanced API</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>White-label options</span>
+                        </div>
+                        <div class="feature-item">
+                            <span class="feature-icon">✓</span>
+                            <span>Custom integrations</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMPARISON TABLE -->
+    <section class="section relative" style="background: var(--color-bg-secondary);">
+        <div class="container">
+            <h2 class="text-center mb-lg">Compare All <span class="gradient-text">Features</span></h2>
+
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Features</th>
+                            <th>Starter</th>
+                            <th>Professional</th>
+                            <th>Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Keyword Tracking</td>
+                            <td>100</td>
+                            <td>5,000</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Websites</td>
+                            <td>1</td>
+                            <td>10</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td>Backlink Monitoring</td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>Competitor Analysis</td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>API Access</td>
+                            <td>—</td>
+                            <td>Limited</td>
+                            <td>Full</td>
+                        </tr>
+                        <tr>
+                            <td>Custom Reports</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td>White-label</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section relative">
+        <div class="container">
+            <h2 class="text-center mb-lg">Pricing <span class="gradient-text">FAQ</span></h2>
+
+            <div class="faq-container">
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span>Can I change plans later?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! You can upgrade or downgrade your plan at any time. Changes take effect immediately.
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span>What payment methods do you accept?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        We accept all major credit cards (Visa, MasterCard, Amex), PayPal, and bank transfers for
+                        Enterprise plans.
+                    </div>
+                </div>
+
+                <div class="faq-item fade-in">
+                    <div class="faq-question">
+                        <span>Do you offer refunds?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, we offer a 30-day money-back guarantee. If you're not satisfied, we'll refund your payment
+                        in full.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <div style="font-size: 1.5rem; font-weight: 800; margin-bottom: 1rem;">
+                        <span class="gradient-text">AmirzhanFree</span>
+                    </div>
+                    <p style="color: var(--color-text-muted); max-width: 300px;">
+                        The most advanced SEO research platform for modern marketers.
+                    </p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-column">
+                        <div class="footer-title">Product</div>
+                        <a href="index.html#features">Features</a>
+                        <a href="pricing.html">Pricing</a>
+                        <a href="#">API</a>
+                        <a href="#">Integrations</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <div class="footer-title">Resources</div>
+                        <a href="#">Documentation</a>
+                        <a href="#">Blog</a>
+                        <a href="#">Support</a>
+                        <a href="#">Status</a>
+                    </div>
+
+                    <div class="footer-column">
+                        <div class="footer-title">Company</div>
+                        <a href="#">About</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Contact</a>
+                        <a href="#">Privacy</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p style="color: var(--color-text-muted); font-size: 0.875rem;">
+                    © 2026 AmirzhanFree. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
