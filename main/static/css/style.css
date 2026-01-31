@@ -2277,8 +2277,8 @@ p {
 
     .mockup-container {
         overflow-x: auto;
-        overflow-y: auto;
-        max-height: 600px;
+        overflow-y: hidden;
+        max-height: 280px;
     }
 
     /* Admin Header - Stack on mobile */
@@ -2327,12 +2327,16 @@ p {
         padding: 1rem !important;
     }
 
-    /* Dashboard Content - Stack layout */
+    /* Hide all stat cards except first (Products) */
+    .mockup-container > div:nth-child(2) > div:nth-child(2),
+    .mockup-container > div:nth-child(2) > div:nth-child(3),
+    .mockup-container > div:nth-child(2) > div:nth-child(4) {
+        display: none !important;
+    }
+
+    /* Hide everything after products card (Orders, Quick Actions, Notifications) */
     .mockup-container > div:nth-child(3) {
-        display: grid;
-        grid-template-columns: 1fr !important;
-        gap: 1rem;
-        padding: 1.5rem 1rem !important;
+        display: none !important;
     }
 
     .mockup-container > div:nth-child(3) > div {
