@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}{{ page_title.text }}{% endblock %}
+{% block description %}{{ desc.text }}{% endblock %}
+{% block title_key %}{{ page_title.key }}{% endblock %}
+
+{% block content %}
+  <!-- CASE SECTION -->
+  <section class="section">
+    <div class="container case">
+      <nav class="case__crumbs">
+        <a href="/portfolio" data-i18n="nav_portfolio">Портфолио</a>
+        <span>→</span>
+        <span data-i18n="{{ title.key }}">{{ title.text }}</span>
+      </nav>
+
+      <h1 data-i18n="{{ title.key }}">{{ title.text }}</h1>
+
+      {% if image %}
+      <img class="case__image" src="{% static image %}" alt="{{ title.text }}">
+      {% else %}
+      {% include 'partials/cover.html' with key=title.key text=title.text extra='case__image' %}
+      {% endif %}
+
+      <div class="case__meta">
+        <div>
+          <h3 data-i18n="case_desc_title">Описание проекта</h3>
+          <p data-i18n="{{ desc.key }}">{{ desc.text }}</p>
+        </div>
+
+        <div>
+          {% if stack %}
+          <h3 data-i18n="case_stack_title">Технологии</h3>
+          <div class="case__stack">
+            {% for name in stack %}<span>{{ name }}</span>{% endfor %}
+          </div>
+          {% endif %}
+
+          <div class="case__facts">
+            <div>
+              <h3 data-i18n="case_client_title">Клиент</h3>
+              <p>{{ client }}</p>
+            </div>
+            <div>
+              <h3 data-i18n="case_format_title">Формат</h3>
+              <p data-i18n="{{ format.key }}">{{ format.text }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="case__section">
+        <h2 data-i18n="{{ about_title.key }}">{{ about_title.text }}</h2>
+        {% for item in about %}
+        <p data-i18n="{{ item.key }}">{{ item.text }}</p>
+        {% endfor %}
+      </div>
+
+      <div class="case__section">
+        <h2 data-i18n="case_done_title">Что мы сделали</h2>
+        <p data-i18n="{{ done_intro.key }}">{{ done_intro.text }}</p>
+        <ul class="bullets">
+          {% for item in done %}
+          <li data-i18n="{{ item.key }}">{{ item.text }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="case__section">
+        <h2 data-i18n="case_result_title">Результат</h2>
+        {% for item in result %}
+        <p data-i18n="{{ item.key }}">{{ item.text }}</p>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="container">
+      {% include 'partials/banner.html' %}
+    </div>
+  </section>
+{% endblock %}

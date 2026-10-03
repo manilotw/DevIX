@@ -1,0 +1,174 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}{{ page_title.text }}{% endblock %}
+{% block description %}{{ sub.text }}{% endblock %}
+{% block title_key %}{{ page_title.key }}{% endblock %}
+
+{% block content %}
+  <!-- HERO SECTION -->
+  <section class="hero hero--light">
+    <div class="container hero__content">
+      <h1 data-i18n="{{ h1.key }}">{{ h1.text }}</h1>
+
+      <p class="hero__subtitle" data-i18n="{{ sub.key }}">{{ sub.text }}</p>
+
+      <div class="hero__actions">
+        <a href="#contact" class="btn btn--accent btn--hero" data-i18n="header_cta">Обсудить проект</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOLUTIONS SECTION -->
+  <section class="section section--white">
+    <div class="container">
+      <div class="heading">
+        <h2 data-i18n="{{ solutions_title.key }}">{{ solutions_title.text }}</h2>
+      </div>
+
+      <div class="cards cards--3">
+        {% for item in solutions %}
+        <div class="card card--outline">
+          <div class="card__icon"><svg class="icon"><use href="#{{ item.icon }}"/></svg></div>
+          <h3 data-i18n="{{ item.title.key }}">{{ item.title.text }}</h3>
+          <p data-i18n="{{ item.desc.key }}">{{ item.desc.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- BENEFITS SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="heading">
+        <h2 data-i18n="{{ benefits_title.key }}">{{ benefits_title.text }}</h2>
+      </div>
+
+      {% for item in benefits %}
+      <div class="row-card row-card--solid">
+        <svg class="icon row-card__icon"><use href="#{{ item.icon }}"/></svg>
+        <h3 data-i18n="{{ item.title.key }}">{{ item.title.text }}</h3>
+        <p data-i18n="{{ item.desc.key }}">{{ item.desc.text }}</p>
+      </div>
+      {% endfor %}
+
+      <div class="banner">
+        <div class="banner__text">
+          <h2 data-i18n="sp_banner_title">Подберём решение для вас</h2>
+          <p data-i18n="sp_banner_desc">Напишите нам — обсудим задачу и предложим варианты</p>
+        </div>
+        <div class="banner__actions">
+          <a href="#contact" class="btn btn--white" data-i18n="nav_cta">Связаться</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STAGES SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="heading heading--tight">
+        <h2 data-i18n="sp_stages_title">Этапы работ</h2>
+      </div>
+
+      <div class="cards cards--3">
+        {% for item in stages %}
+        <div class="card">
+          <div class="card__num">{{ item.num }}</div>
+          <h3 data-i18n="{{ item.title.key }}">{{ item.title.text }}</h3>
+          <p data-i18n="{{ item.desc.key }}">{{ item.desc.text }}</p>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICE SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="price">
+        <div class="price__text">
+          <h2 data-i18n="sp_price_title">Стоимость</h2>
+          <p data-i18n="{{ price_text.key }}">{{ price_text.text }}</p>
+        </div>
+
+        <div class="card price__card">
+          <div class="price__value" data-i18n="{{ price.key }}">{{ price.text }}</div>
+          <p data-i18n="sp_price_note">Стоимость зависит от сложности проекта</p>
+          <div class="price__row">
+            <b data-i18n="sp_term_label">Сроки</b>
+            <span data-i18n="{{ term.key }}">{{ term.text }}</span>
+          </div>
+        </div>
+      </div>
+
+      {% if has_price %}
+      <a href="/calculator" class="btn btn--accent btn--wide" data-i18n="sp_price_btn_calc">Рассчитать в калькуляторе</a>
+      {% else %}
+      <a href="#contact" class="btn btn--accent btn--wide" data-i18n="sp_price_btn_ask">Получить оценку стоимости</a>
+      {% endif %}
+    </div>
+  </section>
+
+  {% include 'partials/how.html' %}
+
+  <!-- EXAMPLES SECTION -->
+  {% if projects %}
+  <section class="section section--white">
+    <div class="container">
+      <div class="heading heading--row">
+        <h2 data-i18n="sp_examples_title">Примеры проектов</h2>
+        <a href="/portfolio" class="more-link">
+          <span data-i18n="portfolio_all">Все проекты</span>
+          <svg class="icon"><use href="#i-chevron"/></svg>
+        </a>
+      </div>
+
+      {% if projects|length < 3 %}
+      {% for card in projects %}
+      {% include 'partials/project_card.html' with light=True %}
+      {% endfor %}
+      {% else %}
+      <div class="cards cards--3">
+        {% for item in projects %}
+        <a href="{{ item.url }}" class="card example">
+          {% if item.image %}
+          <img class="example__image" src="{% static item.image %}" alt="{{ item.title.text }}" loading="lazy">
+          {% else %}
+          {% include 'partials/cover.html' with key=item.title.key text=item.title.text extra='example__image' %}
+          {% endif %}
+          <div class="example__body">
+            <h3 data-i18n="{{ item.title.key }}">{{ item.title.text }}</h3>
+            <p data-i18n="{{ item.desc.key }}">{{ item.desc.text }}</p>
+            <span class="link" data-i18n="sp_examples_view">Подробнее</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- FAQ SECTION -->
+  <section id="faq" class="section">
+    <div class="container">
+      <div class="heading">
+        <h2 data-i18n="sp_faq_title">Ответы на вопросы</h2>
+      </div>
+
+      <div class="faq-container">
+        {% for item in faq %}
+        <div class="faq-item">
+          <button type="button" class="faq-question">
+            <span data-i18n="{{ item.question.key }}">{{ item.question.text }}</span>
+            <span class="faq-icon"></span>
+          </button>
+          <div class="faq-answer" data-i18n="{{ item.answer.key }}">{{ item.answer.text }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endblock %}

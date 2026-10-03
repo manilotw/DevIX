@@ -1,444 +1,252 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
+{% extends 'layout.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevIX | Разработка Telegram Ботов</title>
-  <meta name="description"
-    content="Профессиональная разработка Telegram ботов для бизнеса. Автоматизация, интеграции, CRM-системы и многое другое.">
+{% block title %}DevIX | Telegram Боты - Услуги Разработки{% endblock %}
+{% block description %}DevIX - Разработка Telegram ботов для автоматизации бизнеса: e-commerce, поддержка, запись, рассылки и интеграции с CRM.{% endblock %}
+{% block title_key %}page_title_telegram{% endblock %}
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
-
-  <!-- Hide content until translations are loaded -->
-  <script>
-    document.documentElement.style.visibility = 'hidden';
-    document.documentElement.style.opacity = '0';
-  </script>
-
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=18">
-  
-  <!-- Sync Translation Loader -->
-  <script>
-    (function() {
-      let lang = localStorage.getItem('lang');
-      if (!lang || (lang !== 'en' && lang !== 'ru')) {
-        const path = window.location.pathname;
-        lang = path.startsWith('/en') ? 'en' : 'ru';
-      }
-      try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/static/js/${lang}.json?v=20260201`, false);
-        xhr.send();
-        if (xhr.status === 200) {
-          window.translations = JSON.parse(xhr.responseText);
-          window.currentLang = lang;
-          
-          // Обновляем title страницы сразу
-          const titleKey = 'page_title_telegram';
-          if (window.translations[titleKey]) {
-            document.title = window.translations[titleKey];
-          }
-          
-          document.addEventListener('DOMContentLoaded', function() {
-            applyTranslations();
-          });
-        }
-      } catch (e) {
-        console.error('Failed to load translations:', e);
-      }
-      function applyTranslations() {
-        if (!window.translations) return;
-        const t = window.translations;
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.getAttribute('data-i18n');
-          if (t[key]) el.textContent = t[key];
-        });
-        document.querySelectorAll('[data-i18n-html]').forEach(el => {
-          const key = el.getAttribute('data-i18n-html');
-          if (t[key]) el.innerHTML = t[key];
-        });
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-          const key = el.getAttribute('data-i18n-placeholder');
-          if (t[key]) el.placeholder = t[key];
-        });
-        document.querySelectorAll('[data-i18n-label]').forEach(el => {
-          const key = el.getAttribute('data-i18n-label');
-          if (t[key]) el.setAttribute('data-label', t[key]);
-        });
-        
-        // Показываем контент после применения переводов
-        document.documentElement.style.visibility = 'visible';
-        document.documentElement.style.opacity = '1';
-      }
-    })();
-  </script>
-  
-  <!-- Language Translator Script -->
-  <script src="{% static 'js/translator.js' %}?v=20260131"></script>
-</head>
-
-<body>
-  <!-- Particle Canvas -->
-  <canvas id="particles"></canvas>
-
-  <!-- 3D Perspective Grid -->
-  <div class="perspective-grid"></div>
-
-  <!-- Header -->
-  {% include 'partials/header.html' %}
-
+{% block content %}
   <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="purple-glow" style="top: 10%; left: 20%;"></div>
-    <div class="purple-glow" style="bottom: 20%; right: 15%;"></div>
+  <section class="hero hero--light">
+    <div class="container hero__content">
+      <h1>
+        <span data-i18n="tgbots_title1">Разработка</span>
+        <span data-i18n="tgbots_title2">Telegram Ботов</span>
+      </h1>
 
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge" data-i18n="tgbots_badge">
-          🤖 Автоматизация бизнеса
-        </div>
+      <p class="hero__subtitle" data-i18n="tgbots_subtitle">
+        Создаем умных ботов для автоматизации вашего бизнеса в Telegram
+      </p>
 
-        <h1>
-          <span data-i18n="tgbots_title1">Разработка</span> <br>
-          <span class="gradient-text" data-i18n="tgbots_title2">Telegram Ботов</span>
-        </h1>
-
-        <p class="hero-subtitle" data-i18n="tgbots_subtitle">
-          Создаем умных ботов для автоматизации вашего бизнеса в Telegram
-        </p>
-
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="#services" class="btn btn-primary btn-large" data-i18n="tgbots_btn1">Наши услуги</a>
-          <a href="https://wa.me/?text=Здравствуйте! Хочу заказать Telegram бота" class="btn btn-outline btn-large" target="_blank" data-i18n="tgbots_btn2">Заказать бота</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- WHY TELEGRAM BOTS SECTION -->
-  <section class="section" style="padding: 6rem 0; background: var(--color-bg-secondary);">
-    <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4rem);">
-          <span data-i18n="tgbots_why_title">Почему</span> <span class="gradient-text" data-i18n="tgbots_why_title_gradient">Telegram Боты?</span>
-        </h2>
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 800px; margin: 2rem auto 0;" data-i18n="tgbots_why_subtitle">
-          Telegram боты - это мощный инструмент для автоматизации бизнес-процессов и улучшения взаимодействия с клиентами
-        </p>
-      </div>
-
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 4rem;">
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">⚡</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit1_title">Мгновенная связь</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit1_desc">
-            Общайтесь с клиентами в режиме реального времени через самый популярный мессенджер
-          </p>
-        </div>
-
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">🔄</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit2_title">Автоматизация</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit2_desc">
-            Автоматизируйте рутинные задачи: прием заказов, консультации, уведомления и рассылки
-          </p>
-        </div>
-
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">💰</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit3_title">Экономия ресурсов</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit3_desc">
-            Сократите расходы на персонал и обработку заявок с помощью умного бота
-          </p>
-        </div>
-
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">📊</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit4_title">Аналитика</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit4_desc">
-            Получайте детальную статистику по работе бота и поведению пользователей
-          </p>
-        </div>
-
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">🔐</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit5_title">Безопасность</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit5_desc">
-            Защищенная передача данных и возможность интеграции с CRM-системами
-          </p>
-        </div>
-
-        <div class="glass-card" style="padding: 2.5rem;">
-          <div style="font-size: 3rem; margin-bottom: 1.5rem;">🌍</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_benefit6_title">Доступность</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_benefit6_desc">
-            Ваш бот работает 24/7 и доступен клиентам в любой точке мира
-          </p>
-        </div>
+      <div class="hero__actions">
+        <a href="#contact" class="btn btn--accent btn--hero" data-i18n="tgbots_btn2">Заказать бота</a>
       </div>
     </div>
   </section>
 
   <!-- SERVICES SECTION -->
-  <section id="services" class="section" style="padding: 8rem 0;">
+  <section id="services" class="section section--white">
     <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4rem);">
-          <span data-i18n="tgbots_services_title">Наши</span> <span class="gradient-text" data-i18n="tgbots_services_title_gradient">Услуги</span>
-        </h2>
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 2rem auto 0;" data-i18n="tgbots_services_subtitle">
-          Полный спектр услуг по разработке Telegram ботов под ваши задачи
-        </p>
+      <div class="heading">
+        <h2><span data-i18n="tgbots_services_title">Наши</span> <span data-i18n="tgbots_services_title_gradient">Услуги</span></h2>
+        <p data-i18n="tgbots_services_subtitle">Полный спектр услуг по разработке Telegram ботов под ваши задачи</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; margin-top: 4rem;">
-        
-        <!-- Service Card 1 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">🛒</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service1_title">Боты для E-commerce</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service1_desc">
-              Создаем ботов для приема заказов, оплаты, отслеживания доставки и управления каталогом товаров
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service1_feature1">Каталог товаров с фото и описанием</li>
-              <li data-i18n="tgbots_service1_feature2">Корзина и оформление заказа</li>
-              <li data-i18n="tgbots_service1_feature3">Интеграция платежных систем</li>
-              <li data-i18n="tgbots_service1_feature4">Уведомления о статусе заказа</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать бота для E-commerce" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
+      <!-- Service Card 1 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-cart"/></svg>
+        <h3 data-i18n="tgbots_service1_title">Боты для E-commerce</h3>
+        <p data-i18n="tgbots_service1_desc">Создаем ботов для приема заказов, оплаты, отслеживания доставки и управления каталогом товаров</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service1_feature1">Каталог товаров с фото и описанием</li>
+          <li data-i18n="tgbots_service1_feature2">Корзина и оформление заказа</li>
+          <li data-i18n="tgbots_service1_feature3">Интеграция платежных систем</li>
+          <li data-i18n="tgbots_service1_feature4">Уведомления о статусе заказа</li>
+        </ul>
+      </div>
 
-        <!-- Service Card 2 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">💬</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service2_title">Чат-боты поддержки</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service2_desc">
-              Умные ассистенты для консультации клиентов и обработки запросов в автоматическом режиме
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service2_feature1">FAQ и база знаний</li>
-              <li data-i18n="tgbots_service2_feature2">Обработка типовых вопросов</li>
-              <li data-i18n="tgbots_service2_feature3">Переключение на оператора</li>
-              <li data-i18n="tgbots_service2_feature4">Многоязычная поддержка</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать чат-бота поддержки" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
+      <!-- Service Card 2 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-chat"/></svg>
+        <h3 data-i18n="tgbots_service2_title">Чат-боты поддержки</h3>
+        <p data-i18n="tgbots_service2_desc">Умные ассистенты для консультации клиентов и обработки запросов в автоматическом режиме</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service2_feature1">FAQ и база знаний</li>
+          <li data-i18n="tgbots_service2_feature2">Обработка типовых вопросов</li>
+          <li data-i18n="tgbots_service2_feature3">Переключение на оператора</li>
+          <li data-i18n="tgbots_service2_feature4">Многоязычная поддержка</li>
+        </ul>
+      </div>
 
-        <!-- Service Card 3 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">📅</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service3_title">Боты для записи</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service3_desc">
-              Автоматизация записи клиентов на услуги: салоны красоты, медицинские центры, студии
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service3_feature1">Онлайн-запись 24/7</li>
-              <li data-i18n="tgbots_service3_feature2">Выбор специалиста и услуги</li>
-              <li data-i18n="tgbots_service3_feature3">Напоминания о записи</li>
-              <li data-i18n="tgbots_service3_feature4">Отмена и перенос записи</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать бота для записи" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
+      <!-- Service Card 3 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-calendar"/></svg>
+        <h3 data-i18n="tgbots_service3_title">Боты для записи</h3>
+        <p data-i18n="tgbots_service3_desc">Автоматизация записи клиентов на услуги: салоны красоты, медицинские центры, студии</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service3_feature1">Онлайн-запись 24/7</li>
+          <li data-i18n="tgbots_service3_feature2">Выбор специалиста и услуги</li>
+          <li data-i18n="tgbots_service3_feature3">Напоминания о записи</li>
+          <li data-i18n="tgbots_service3_feature4">Отмена и перенос записи</li>
+        </ul>
+      </div>
 
-        <!-- Service Card 4 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">📢</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service4_title">Рассылки и уведомления</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service4_desc">
-              Создаем системы массовых рассылок с персонализацией и сегментацией аудитории
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service4_feature1">Таргетированные рассылки</li>
-              <li data-i18n="tgbots_service4_feature2">Автоматические уведомления</li>
-              <li data-i18n="tgbots_service4_feature3">Расписание отправки</li>
-              <li data-i18n="tgbots_service4_feature4">Аналитика откликов</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать бота для рассылок" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
+      <!-- Service Card 4 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-send"/></svg>
+        <h3 data-i18n="tgbots_service4_title">Рассылки и уведомления</h3>
+        <p data-i18n="tgbots_service4_desc">Создаем системы массовых рассылок с персонализацией и сегментацией аудитории</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service4_feature1">Таргетированные рассылки</li>
+          <li data-i18n="tgbots_service4_feature2">Автоматические уведомления</li>
+          <li data-i18n="tgbots_service4_feature3">Расписание отправки</li>
+          <li data-i18n="tgbots_service4_feature4">Аналитика откликов</li>
+        </ul>
+      </div>
 
-        <!-- Service Card 5 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">🔗</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service5_title">Интеграции с CRM</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service5_desc">
-              Подключаем ботов к вашим CRM-системам для синхронизации данных и автоматизации процессов
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service5_feature1">AmoCRM, Bitrix24, 1C</li>
-              <li data-i18n="tgbots_service5_feature2">Синхронизация клиентов</li>
-              <li data-i18n="tgbots_service5_feature3">Автоматическое создание сделок</li>
-              <li data-i18n="tgbots_service5_feature4">Двусторонний обмен данными</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать интеграцию бота с CRM" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
+      <!-- Service Card 5 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-link"/></svg>
+        <h3 data-i18n="tgbots_service5_title">Интеграции с CRM</h3>
+        <p data-i18n="tgbots_service5_desc">Подключаем ботов к вашим CRM-системам для синхронизации данных и автоматизации процессов</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service5_feature1">AmoCRM, Bitrix24, 1C</li>
+          <li data-i18n="tgbots_service5_feature2">Синхронизация клиентов</li>
+          <li data-i18n="tgbots_service5_feature3">Автоматическое создание сделок</li>
+          <li data-i18n="tgbots_service5_feature4">Двусторонний обмен данными</li>
+        </ul>
+      </div>
 
-        <!-- Service Card 6 -->
-        <div class="glass-card" style="overflow: hidden; transition: transform 0.3s, box-shadow 0.3s;">
-          <div style="padding: 2.5rem;">
-            <div style="font-size: 2.5rem; margin-bottom: 1.5rem;">⚙️</div>
-            <h3 style="font-size: 1.75rem; margin-bottom: 1rem;" data-i18n="tgbots_service6_title">Кастомные решения</h3>
-            <p style="color: var(--color-text-secondary); margin-bottom: 1.5rem;" data-i18n="tgbots_service6_desc">
-              Разрабатываем уникальных ботов под специфические задачи вашего бизнеса
-            </p>
-            <ul style="color: var(--color-text-secondary); margin-bottom: 1.5rem; padding-left: 1.5rem;">
-              <li data-i18n="tgbots_service6_feature1">Индивидуальная разработка</li>
-              <li data-i18n="tgbots_service6_feature2">Сложная бизнес-логика</li>
-              <li data-i18n="tgbots_service6_feature3">Кастомный дизайн интерфейса</li>
-              <li data-i18n="tgbots_service6_feature4">Масштабируемая архитектура</li>
-            </ul>
-            <a href="https://wa.me/?text=Хочу заказать кастомное решение" style="color: var(--color-accent-primary); text-decoration: none; font-weight: 600;" target="_blank" data-i18n="tgbots_order_link">Заказать →</a>
-          </div>
-        </div>
-
+      <!-- Service Card 6 -->
+      <div class="row-card">
+        <svg class="icon row-card__icon"><use href="#i-sliders"/></svg>
+        <h3 data-i18n="tgbots_service6_title">Кастомные решения</h3>
+        <p data-i18n="tgbots_service6_desc">Разрабатываем уникальных ботов под специфические задачи вашего бизнеса</p>
+        <ul class="bullets">
+          <li data-i18n="tgbots_service6_feature1">Индивидуальная разработка</li>
+          <li data-i18n="tgbots_service6_feature2">Сложная бизнес-логика</li>
+          <li data-i18n="tgbots_service6_feature3">Кастомный дизайн интерфейса</li>
+          <li data-i18n="tgbots_service6_feature4">Масштабируемая архитектура</li>
+        </ul>
       </div>
     </div>
   </section>
 
-  <!-- TECHNOLOGIES SECTION -->
-  <section class="section" style="padding: 6rem 0; background: var(--color-bg-secondary);">
+  <!-- WHY TELEGRAM BOTS SECTION -->
+  <section class="section">
     <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4rem);">
-          <span data-i18n="tgbots_tech_title">Технологии</span> <span class="gradient-text" data-i18n="tgbots_tech_title_gradient">Разработки</span>
-        </h2>
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 2rem auto 0;" data-i18n="tgbots_tech_subtitle">
-          Используем современные технологии для создания надежных и производительных ботов
-        </p>
+      <div class="heading">
+        <h2><span data-i18n="tgbots_why_title">Почему</span> <span data-i18n="tgbots_why_title_gradient">Telegram Боты?</span></h2>
+        <p data-i18n="tgbots_why_subtitle">Telegram боты - это мощный инструмент для автоматизации бизнес-процессов и улучшения взаимодействия с клиентами</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 4rem;">
-        <div class="glass-card" style="padding: 2rem; text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🐍</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;" data-i18n="tgbots_tech1_title">Python</h3>
-          <p style="color: var(--color-text-secondary); font-size: 0.875rem;" data-i18n="tgbots_tech1_desc">aiogram, python-telegram-bot, telebot</p>
+      <div class="cards cards--2">
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-zap"/></svg></div>
+          <h3 data-i18n="tgbots_benefit1_title">Мгновенная связь</h3>
+          <p data-i18n="tgbots_benefit1_desc">Общайтесь с клиентами в режиме реального времени через самый популярный мессенджер</p>
         </div>
 
-        <div class="glass-card" style="padding: 2rem; text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🟢</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;" data-i18n="tgbots_tech2_title">Django</h3>
-          <p style="color: var(--color-text-secondary); font-size: 0.875rem;" data-i18n="tgbots_tech2_desc">ORM, REST framework, CRM</p>
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-refresh"/></svg></div>
+          <h3 data-i18n="tgbots_benefit2_title">Автоматизация</h3>
+          <p data-i18n="tgbots_benefit2_desc">Автоматизируйте рутинные задачи: прием заказов, консультации, уведомления и рассылки</p>
         </div>
 
-        <div class="glass-card" style="padding: 2rem; text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🗄️</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;" data-i18n="tgbots_tech3_title">Базы данных</h3>
-          <p style="color: var(--color-text-secondary); font-size: 0.875rem;" data-i18n="tgbots_tech3_desc">PostgreSQL, SQLite, MangoDB</p>
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-dollar"/></svg></div>
+          <h3 data-i18n="tgbots_benefit3_title">Экономия ресурсов</h3>
+          <p data-i18n="tgbots_benefit3_desc">Сократите расходы на персонал и обработку заявок с помощью умного бота</p>
         </div>
 
-        <div class="glass-card" style="padding: 2rem; text-align: center;">
-          <div style="font-size: 3rem; margin-bottom: 1rem;">🤖</div>
-          <h3 style="font-size: 1.25rem; margin-bottom: 0.5rem;" data-i18n="tgbots_tech4_title">AI & ML</h3>
-          <p style="color: var(--color-text-secondary); font-size: 0.875rem;" data-i18n="tgbots_tech4_desc">ChatGPT,DialogFlow, Natural Language Processing</p>
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-chart"/></svg></div>
+          <h3 data-i18n="tgbots_benefit4_title">Аналитика</h3>
+          <p data-i18n="tgbots_benefit4_desc">Получайте детальную статистику по работе бота и поведению пользователей</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-lock"/></svg></div>
+          <h3 data-i18n="tgbots_benefit5_title">Безопасность</h3>
+          <p data-i18n="tgbots_benefit5_desc">Защищенная передача данных и возможность интеграции с CRM-системами</p>
+        </div>
+
+        <div class="card">
+          <div class="card__icon"><svg class="icon"><use href="#i-globe"/></svg></div>
+          <h3 data-i18n="tgbots_benefit6_title">Доступность</h3>
+          <p data-i18n="tgbots_benefit6_desc">Ваш бот работает 24/7 и доступен клиентам в любой точке мира</p>
         </div>
       </div>
     </div>
   </section>
 
   <!-- PROCESS SECTION -->
-  <section class="section" style="padding: 8rem 0;">
+  <section class="section">
     <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4rem);">
-          <span data-i18n="tgbots_process_title">Процесс</span> <span class="gradient-text" data-i18n="tgbots_process_title_gradient">Разработки</span>
-        </h2>
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 2rem auto 0;" data-i18n="tgbots_process_subtitle">
-          Четкий и прозрачный процесс от идеи до запуска
-        </p>
+      <div class="heading heading--tight">
+        <h2><span data-i18n="tgbots_process_title">Процесс</span> <span data-i18n="tgbots_process_title_gradient">Разработки</span></h2>
+        <p data-i18n="tgbots_process_subtitle">Четкий и прозрачный процесс от идеи до запуска</p>
       </div>
 
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin-top: 4rem;">
-        
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #a855f7, #d946ef); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">1</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process1_title">Анализ задачи</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process1_desc">Изучаем ваши потребности и определяем функционал бота</p>
+      <div class="cards cards--3">
+        <div class="card">
+          <div class="card__num">1</div>
+          <h3 data-i18n="tgbots_process1_title">Анализ задачи</h3>
+          <p data-i18n="tgbots_process1_desc">Изучаем ваши потребности и определяем функционал бота</p>
         </div>
 
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #06b6d4, #0ea5e9); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">2</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process2_title">Проектирование</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process2_desc">Разрабатываем архитектуру и сценарии работы бота</p>
+        <div class="card">
+          <div class="card__num">2</div>
+          <h3 data-i18n="tgbots_process2_title">Проектирование</h3>
+          <p data-i18n="tgbots_process2_desc">Разрабатываем архитектуру и сценарии работы бота</p>
         </div>
 
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #f59e0b, #f97316); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">3</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process3_title">Разработка</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process3_desc">Создаем бота с использованием современных технологий</p>
+        <div class="card">
+          <div class="card__num">3</div>
+          <h3 data-i18n="tgbots_process3_title">Разработка</h3>
+          <p data-i18n="tgbots_process3_desc">Создаем бота с использованием современных технологий</p>
         </div>
 
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">4</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process4_title">Тестирование</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process4_desc">Проводим полное тестирование всех функций и сценариев</p>
+        <div class="card">
+          <div class="card__num">4</div>
+          <h3 data-i18n="tgbots_process4_title">Тестирование</h3>
+          <p data-i18n="tgbots_process4_desc">Проводим полное тестирование всех функций и сценариев</p>
         </div>
 
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #8b5cf6, #a855f7); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">5</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process5_title">Запуск</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process5_desc">Деплоим бота на надежные сервера и настраиваем мониторинг</p>
+        <div class="card">
+          <div class="card__num">5</div>
+          <h3 data-i18n="tgbots_process5_title">Запуск</h3>
+          <p data-i18n="tgbots_process5_desc">Деплоим бота на надежные сервера и настраиваем мониторинг</p>
         </div>
 
-        <div style="text-align: center;">
-          <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #ec4899, #f43f5e); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin: 0 auto 1.5rem;">6</div>
-          <h3 style="font-size: 1.5rem; margin-bottom: 1rem;" data-i18n="tgbots_process6_title">Поддержка</h3>
-          <p style="color: var(--color-text-secondary);" data-i18n="tgbots_process6_desc">Обеспечиваем техническую поддержку и доработки</p>
+        <div class="card">
+          <div class="card__num">6</div>
+          <h3 data-i18n="tgbots_process6_title">Поддержка</h3>
+          <p data-i18n="tgbots_process6_desc">Обеспечиваем техническую поддержку и доработки</p>
         </div>
-
       </div>
     </div>
   </section>
 
-  <!-- CTA SECTION -->
-  <section id="contact" class="cta-section relative">
+  <!-- TECHNOLOGIES SECTION -->
+  <section class="section">
     <div class="container">
-      <div class="cta-content">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: 1.5rem;">
-          <span data-i18n="tgbots_cta_title1">Готовы создать</span> <br>
-          <span class="gradient-text" data-i18n="tgbots_cta_title2">своего бота?</span>
-        </h2>
+      <div class="heading heading--tight">
+        <h2><span data-i18n="tgbots_tech_title">Технологии</span> <span data-i18n="tgbots_tech_title_gradient">Разработки</span></h2>
+        <p data-i18n="tgbots_tech_subtitle">Используем современные технологии для создания надежных и производительных ботов</p>
+      </div>
 
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 0 auto 3rem;" data-i18n="tgbots_cta_subtitle">
-          Оставьте заявку, и мы свяжемся с вами для обсуждения вашего проекта
-        </p>
-
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="https://wa.me/+77776183053?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%B7%D0%B0%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D1%8C%20Telegram-%D0%B1%D0%BE%D1%82%D0%B0." class="btn btn-primary btn-large" target="_blank" data-i18n="tgbots_cta_btn">Получить консультацию</a>
+      <div class="cards cards--4">
+        <div class="card">
+          <h3 data-i18n="tgbots_tech1_title">Python</h3>
+          <p data-i18n="tgbots_tech1_desc">aiogram, python-telegram-bot, telebot</p>
         </div>
 
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 1rem;" data-i18n="tgbots_cta_note">
-          🚀 Бесплатная консультация • Расчет стоимости за 24 часа • Прозрачные условия
-        </p>
+        <div class="card">
+          <h3 data-i18n="tgbots_tech2_title">Django</h3>
+          <p data-i18n="tgbots_tech2_desc">ORM, REST framework, CRM</p>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="tgbots_tech3_title">Базы данных</h3>
+          <p data-i18n="tgbots_tech3_desc">PostgreSQL, SQLite, MongoDB</p>
+        </div>
+
+        <div class="card">
+          <h3 data-i18n="tgbots_tech4_title">AI & ML</h3>
+          <p data-i18n="tgbots_tech4_desc">ChatGPT, DialogFlow, Natural Language Processing</p>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <div class="banner">
+        <div class="banner__text">
+          <h2><span data-i18n="tgbots_cta_title1">Готовы создать</span> <span data-i18n="tgbots_cta_title2">своего бота?</span></h2>
+          <p data-i18n="tgbots_cta_subtitle">Оставьте заявку, и мы свяжемся с вами для обсуждения вашего проекта</p>
+        </div>
+        <div class="banner__actions">
+          <a href="#contact" class="btn btn--white" data-i18n="tgbots_cta_btn">Получить консультацию</a>
+        </div>
       </div>
     </div>
   </section>
-
-  <!-- Footer -->
-  {% include 'partials/footer.html' %}
-
-  <!-- JavaScript -->
-  <script src="{% static 'js/script.js' %}?v=2"></script>
-  <script src="{% static 'js/contact-form.js' %}?v=2"></script>
-</body>
-
-</html>
+{% endblock %}

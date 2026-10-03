@@ -1,452 +1,178 @@
-{% load static %}
-<!DOCTYPE html>
-<html lang="ru">
+{% extends 'layout.html' %}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DevIX | Современная веб разработка</title>
-  <meta name="description"
-    content="DevIX - Professional website development agency. We create stunning, high-performance websites for your business.">
+{% block header %}{% include 'partials/header.html' with theme='dark' %}{% endblock %}
 
-  <!-- Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
-
-  <!-- Hide content until translations are loaded -->
-  <script>
-    document.documentElement.style.visibility = 'hidden';
-    document.documentElement.style.opacity = '0';
-  </script>
-
-  <!-- Stylesheet -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=18">
-  
-  <!-- Sync Translation Loader -->
-  <script>
-    // Определяем язык: сначала localStorage, потом URL
-    (function() {
-      let lang = localStorage.getItem('lang');
-      
-      // Если в localStorage нет, определяем из URL
-      if (!lang || (lang !== 'en' && lang !== 'ru')) {
-        const path = window.location.pathname;
-        lang = path.startsWith('/en') ? 'en' : 'ru';
-      }
-      
-      try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/static/js/${lang}.json`, false);
-        xhr.send();
-        
-        if (xhr.status === 200) {
-          window.translations = JSON.parse(xhr.responseText);
-          window.currentLang = lang;
-          
-          // Обновляем title страницы сразу
-          const titleKey = 'page_title_index';
-          if (window.translations[titleKey]) {
-            document.title = window.translations[titleKey];
-          }
-          
-          document.addEventListener('DOMContentLoaded', function() {
-            applyTranslations();
-          });
-        }
-      } catch (e) {
-        console.error('Failed to load translations:', e);
-      }
-      
-      function applyTranslations() {
-        if (!window.translations) return;
-        
-        const t = window.translations;
-        
-        document.querySelectorAll('[data-i18n]').forEach(el => {
-          const key = el.getAttribute('data-i18n');
-          if (t[key]) el.textContent = t[key];
-        });
-        
-        document.querySelectorAll('[data-i18n-html]').forEach(el => {
-          const key = el.getAttribute('data-i18n-html');
-          if (t[key]) el.innerHTML = t[key];
-        });
-        
-        document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-          const key = el.getAttribute('data-i18n-placeholder');
-          if (t[key]) el.placeholder = t[key];
-        });
-        
-        document.querySelectorAll('[data-i18n-label]').forEach(el => {
-          const key = el.getAttribute('data-i18n-label');
-          if (t[key]) el.setAttribute('data-label', t[key]);
-        });
-        
-        // Показываем контент после применения переводов
-        document.documentElement.style.visibility = 'visible';
-        document.documentElement.style.opacity = '1';
-      }
-    })();
-  </script>
-  
-  <!-- Language Translator Script -->
-  <script src="{% static 'js/translator.js' %}?v=20260131"></script>
-</head>
-
-<body>
-  <!-- Particle Canvas -->
-  <canvas id="particles"></canvas>
-
-  <!-- 3D Perspective Grid -->
-  <div class="perspective-grid"></div>
-
-  <!-- Header -->
-  {% include 'partials/header.html' %}
-
+{% block content %}
   <!-- HERO SECTION -->
-  <section class="hero">
-    <div class="purple-glow" style="top: 10%; left: 20%;"></div>
-    <div class="purple-glow" style="bottom: 20%; right: 15%;"></div>
+  <section class="hero hero--dark">
+    <div class="container hero__content">
+      <h1>
+        <span data-i18n="hero_title1">Современная веб</span>
+        <span data-i18n="hero_title2">разработка</span>
+      </h1>
 
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-badge" data-i18n="hero_badge">
-          🚀 Создайте свое онлайн присутствие
-        </div>
-
-        <h1>
-          <span data-i18n="hero_title1">Современная веб</span> <br>
-          <span class="gradient-text" data-i18n="hero_title2">разработка</span>
-        </h1>
-
-        <p class="hero-subtitle" data-i18n="hero_subtitle">
-          Мы создаем потрясающие высокопроизводительные сайты, которые приносят результаты.
-          От дизайна до запуска, мы справляемся со всем, что нужно вашему бизнесу.
-        </p>
-
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <button onclick="window.open('https://wa.me/77776183053?text=Добрый%20день!%20Мне%20нужна%20консультация%20по%20разработке%20сайта.', '_blank')" class="btn btn-primary btn-large" style="border: none; cursor: pointer;" data-i18n="hero_btn1">Начать</button>
-          <a href="/portfolio" class="btn btn-outline btn-large" data-i18n="hero_btn2">Посмотреть работы</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRUST SECTION -->
-  <section class="trust-section relative">
-    <div class="container">
-      <p
-        style="color: var(--color-text-muted); font-size: var(--font-size-sm); margin-bottom: 2rem; text-transform: uppercase; letter-spacing: 2px;"
-        data-i18n="trust_section_title">
-        Доверяют нам
+      <p class="hero__subtitle" data-i18n="hero_subtitle">
+        Мы создаем потрясающие высокопроизводительные сайты, которые приносят результаты.
+        От дизайна до запуска, мы справляемся со всем, что нужно вашему бизнесу.
       </p>
-      <div class="logo-grid">
-        <div class="logo-item" data-i18n="trust_startups">СТАРТАПЫ</div>
-        <div class="logo-item" data-i18n="trust_small_business">МАЛЫЙ БИЗНЕС</div>
-        <div class="logo-item" data-i18n="trust_online_projects">ОНЛАЙН ПРОЕКТЫ И СЕРВИСЫ</div>
-        <div class="logo-item" data-i18n="trust_private_clients">ЧАСТНЫЕ КЛИЕНТЫ</div>
+
+      <div class="hero__actions">
+        <a href="#contact" class="btn btn--white btn--hero" data-i18n="header_cta">Обсудить проект</a>
       </div>
     </div>
   </section>
 
-  <!-- ADVANCED RESEARCH EXPERIENCE SECTION -->
-  <section id="research" class="feature-section relative" style="padding: 8rem 0;">
+  <!-- SERVICES SECTION -->
+  <section id="services" class="section">
     <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2 style="font-size: clamp(2.5rem, 6vw, 4rem);">
-          <span data-i18n="admin_panel_title">Удобная админ-панель для</span> <span class="gradient-text" data-i18n="admin_panel_title_gradient">вашего бизнеса</span>
-        </h2>
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 2rem auto 0;" data-i18n="admin_panel_subtitle">
-          Полный контроль над товарами, заказами, пользователями и статистикой в одном месте. Управляйте вашим онлайн-бизнесом с легкостью и эффективностью.
-        </p>
+      <div class="heading">
+        <h2 data-i18n="services_title">Выполняем весь спектр услуг по веб-разработке</h2>
       </div>
 
-      <!-- MODERN ADMIN DASHBOARD -->
-      <div class="advanced-mockup fade-in">
-        <div class="mockup-container" style="background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius: 1.5rem; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.5);">
-          <!-- Dashboard Header -->
-          <div style="background: linear-gradient(90deg, rgba(139, 92, 246, 0.1), rgba(236, 72, 153, 0.1)); padding: 2rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-              <div>
-                <h3 style="color: white; font-size: 1.5rem; font-weight: 700; margin: 0;" data-i18n="admin_panel_header">📊 Управление сайтом</h3>
-                <p style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; margin: 0.5rem 0 0 0;" data-i18n="admin_panel_header_subtitle">Полный контроль над вашим онлайн-бизнесом</p>
-              </div>
-              <div style="display: flex; gap: 1rem;">
-                <button style="padding: 0.75rem 1.5rem; background: rgba(139, 92, 246, 0.2); border: 1px solid rgba(139, 92, 246, 0.5); color: #c4b5fd; border-radius: 0.75rem; cursor: pointer; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='rgba(139, 92, 246, 0.3)'; this.style.borderColor='rgba(139, 92, 246, 0.8)'" onmouseout="this.style.background='rgba(139, 92, 246, 0.2)'; this.style.borderColor='rgba(139, 92, 246, 0.5)'" data-i18n="admin_btn_refresh">🔄 Обновить</button>
-                <button style="padding: 0.75rem 1.5rem; background: rgba(236, 72, 153, 0.2); border: 1px solid rgba(236, 72, 153, 0.5); color: #fbcfe8; border-radius: 0.75rem; cursor: pointer; font-weight: 500; transition: all 0.3s;" onmouseover="this.style.background='rgba(236, 72, 153, 0.3)'; this.style.borderColor='rgba(236, 72, 153, 0.8)'" onmouseout="this.style.background='rgba(236, 72, 153, 0.2)'; this.style.borderColor='rgba(236, 72, 153, 0.5)'" data-i18n="admin_btn_settings">⚙️ Настройки</button>
-              </div>
-            </div>
-          </div>
+      <div class="services">
+        <div class="service">
+          <div class="service__num">1</div>
+          <h3 data-i18n="svc1_title">Лендинги</h3>
+          <p data-i18n="svc1_desc">Одностраничный сайт для продукта или услуги: чёткая структура, формы заявок и высокая конверсия</p>
+          <a href="/services/landing" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-          <!-- Statistics Cards -->
-          <div style="padding: 2rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <div style="background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05)); border: 1px solid rgba(139, 92, 246, 0.3); border-radius: 1rem; padding: 1.5rem;">
-              <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;" data-i18n="stat_products">📦 Товары</div>
-              <div style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;" data-i18n="stat_products_value">1,248</div>
-              <div style="color: #86efac; font-size: 0.875rem; font-weight: 500;" data-i18n="stat_products_growth">↑ +142 за месяц</div>
-            </div>
+        <div class="service">
+          <div class="service__num">2</div>
+          <h3 data-i18n="svc3_title">Интернет-магазины</h3>
+          <p data-i18n="svc3_desc">Сайт с каталогом товаров, корзиной и системой заказов. Подключим онлайн-оплату</p>
+          <a href="/services/online-store" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-            <div style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(236, 72, 153, 0.05)); border: 1px solid rgba(236, 72, 153, 0.3); border-radius: 1rem; padding: 1.5rem;">
-              <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;" data-i18n="stat_orders">🛒 Заказы</div>
-              <div style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;" data-i18n="stat_orders_value">346</div>
-              <div style="color: #86efac; font-size: 0.875rem; font-weight: 500;" data-i18n="stat_orders_growth">↑ +28 за неделю</div>
-            </div>
+        <div class="service">
+          <div class="service__num">3</div>
+          <h3 data-i18n="svc2_title">Корпоративные сайты</h3>
+          <p data-i18n="svc2_desc">Многостраничный сайт компании с основными разделами, который представляет бизнес и вызывает доверие</p>
+          <a href="/services/corporate" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-            <div style="background: linear-gradient(135deg, rgba(34, 197, 94, 0.15), rgba(34, 197, 94, 0.05)); border: 1px solid rgba(34, 197, 94, 0.3); border-radius: 1rem; padding: 1.5rem;">
-              <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;" data-i18n="stat_users">👥 Пользователи</div>
-              <div style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;" data-i18n="stat_users_value">8,532</div>
-              <div style="color: #86efac; font-size: 0.875rem; font-weight: 500;" data-i18n="stat_users_growth">↑ +512 за месяц</div>
-            </div>
+        <div class="service">
+          <div class="service__num">4</div>
+          <h3 data-i18n="svc5_title">Telegram-боты</h3>
+          <p data-i18n="svc5_desc">Боты для приёма заказов, онлайн-записи, поддержки клиентов и рассылок. Работают 24/7, при необходимости подключим к вашей CRM</p>
+          <a href="/telegram-bots" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-            <div style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.15), rgba(59, 130, 246, 0.05)); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 1rem; padding: 1.5rem;">
-              <div style="color: rgba(255, 255, 255, 0.6); font-size: 0.875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 1rem;" data-i18n="stat_revenue">💰 Выручка</div>
-              <div style="color: white; font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem;" data-i18n="stat_revenue_value">$94.5K</div>
-              <div style="color: #86efac; font-size: 0.875rem; font-weight: 500;" data-i18n="stat_revenue_growth">↑ +18.2% за месяц</div>
-            </div>
-          </div>
+        <div class="service">
+          <div class="service__num">5</div>
+          <h3 data-i18n="svc7_title">AI-агенты</h3>
+          <p data-i18n="svc7_desc">Создадим агента на современных языковых моделях — в облаке или локально на вашем сервере. Подключим к базе данных, документам и сервисам: он сам отвечает клиентам и выполняет задачи</p>
+          <a href="/services/ai-agents" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-          <!-- Main Content -->
-          <div style="padding: 2rem; display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
-            <!-- Left: Orders Table -->
-            <div>
-              <div style="margin-bottom: 1.5rem;">
-                <h4 style="color: white; font-size: 1.125rem; font-weight: 700; margin: 0; margin-bottom: 0.5rem;" data-i18n="orders_title">📋 Последние заказы</h4>
-                <p style="color: rgba(255, 255, 255, 0.5); font-size: 0.875rem; margin: 0;" data-i18n="orders_subtitle">Управление текущими заказами</p>
-              </div>
-              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; overflow: hidden;">
-                <table style="width: 100%; font-size: 0.875rem;">
-                  <thead>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.02);">
-                      <th style="padding: 1rem; text-align: left; color: rgba(255, 255, 255, 0.7); font-weight: 600;" data-i18n="orders_table_id">ID Заказа</th>
-                      <th style="padding: 1rem; text-align: left; color: rgba(255, 255, 255, 0.7); font-weight: 600;" data-i18n="orders_table_client">Клиент</th>
-                      <th style="padding: 1rem; text-align: left; color: rgba(255, 255, 255, 0.7); font-weight: 600;" data-i18n="orders_table_status">Статус</th>
-                      <th style="padding: 1rem; text-align: right; color: rgba(255, 255, 255, 0.7); font-weight: 600;" data-i18n="orders_table_amount">Сумма</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(139, 92, 246, 0.1)'" onmouseout="this.style.background='transparent'">
-                      <td data-label="ID" style="padding: 1rem; color: #a78bfa; font-weight: 600;">#ORD-2024-1247</td>
-                      <td data-label="Клиент" style="padding: 1rem; color: rgba(255, 255, 255, 0.8);" data-i18n="order_client1">Иван Петров</td>
-                      <td data-label="Статус" style="padding: 1rem;"><span style="background: rgba(34, 197, 94, 0.2); color: #86efac; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;" data-i18n="order_status_delivered">✓ Доставлен</span></td>
-                      <td data-label="Сумма" style="padding: 1rem; text-align: right; color: #fbbf24; font-weight: 600;">$2,450</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(139, 92, 246, 0.1)'" onmouseout="this.style.background='transparent'">
-                      <td data-label="ID" style="padding: 1rem; color: #a78bfa; font-weight: 600;">#ORD-2024-1246</td>
-                      <td data-label="Клиент" style="padding: 1rem; color: rgba(255, 255, 255, 0.8);" data-i18n="order_client2">Мария Сидорова</td>
-                      <td data-label="Статус" style="padding: 1rem;"><span style="background: rgba(59, 130, 246, 0.2); color: #93c5fd; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;" data-i18n="order_status_in_transit">⏳ В пути</span></td>
-                      <td data-label="Сумма" style="padding: 1rem; text-align: right; color: #fbbf24; font-weight: 600;">$1,890</td>
-                    </tr>
-                    <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05); transition: background 0.2s;" onmouseover="this.style.background='rgba(139, 92, 246, 0.1)'" onmouseout="this.style.background='transparent'">
-                      <td data-label="ID" style="padding: 1rem; color: #a78bfa; font-weight: 600;">#ORD-2024-1245</td>
-                      <td data-label="Клиент" style="padding: 1rem; color: rgba(255, 255, 255, 0.8);" data-i18n="order_client3">Алексей Кузнецов</td>
-                      <td data-label="Статус" style="padding: 1rem;"><span style="background: rgba(239, 68, 68, 0.2); color: #fca5a5; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;" data-i18n="order_status_checking">⚠ На проверке</span></td>
-                      <td data-label="Сумма" style="padding: 1rem; text-align: right; color: #fbbf24; font-weight: 600;">$3,120</td>
-                    </tr>
-                    <tr style="transition: background 0.2s;" onmouseover="this.style.background='rgba(139, 92, 246, 0.1)'" onmouseout="this.style.background='transparent'">
-                      <td data-label="ID" style="padding: 1rem; color: #a78bfa; font-weight: 600;">#ORD-2024-1244</td>
-                      <td data-label="Клиент" style="padding: 1rem; color: rgba(255, 255, 255, 0.8);" data-i18n="order_client4">Ольга Смирнова</td>
-                      <td data-label="Статус" style="padding: 1rem;"><span style="background: rgba(34, 197, 94, 0.2); color: #86efac; padding: 0.25rem 0.75rem; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 600;" data-i18n="order_status_delivered">✓ Доставлен</span></td>
-                      <td data-label="Сумма" style="padding: 1rem; text-align: right; color: #fbbf24; font-weight: 600;">$1,560</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+        <div class="service">
+          <div class="service__num">6</div>
+          <h3 data-i18n="svc4_title">Веб-приложения</h3>
+          <p data-i18n="svc4_desc">Сложные сервисы с личным кабинетом и бизнес-логикой на Python и Django</p>
+          <a href="/services/web-apps" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-            <!-- Right: Quick Actions & Info -->
-            <div>
-              <div style="margin-bottom: 1.5rem;">
-                <h4 style="color: white; font-size: 1.125rem; font-weight: 700; margin: 0; margin-bottom: 1rem;" data-i18n="quick_actions_title">🚀 Быстрые действия</h4>
-                <div style="display: flex; flex-direction: column; gap: 1rem;">
-                  <button style="padding: 1rem; background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.1)); border: 1px solid rgba(139, 92, 246, 0.3); color: #c4b5fd; border-radius: 0.75rem; cursor: pointer; font-weight: 600; text-align: left; transition: all 0.3s; font-size: 0.875rem;" onmouseover="this.style.background='linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(168, 85, 247, 0.2))'; this.style.borderColor='rgba(139, 92, 246, 0.6)'" onmouseout="this.style.background='linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(168, 85, 247, 0.1))'; this.style.borderColor='rgba(139, 92, 246, 0.3)'" data-i18n="quick_action_add_product">➕ Добавить товар</button>
-                  <button style="padding: 1rem; background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1)); border: 1px solid rgba(236, 72, 153, 0.3); color: #fbcfe8; border-radius: 0.75rem; cursor: pointer; font-weight: 600; text-align: left; transition: all 0.3s; font-size: 0.875rem;" onmouseover="this.style.background='linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(236, 72, 153, 0.2))'; this.style.borderColor='rgba(236, 72, 153, 0.6)'" onmouseout="this.style.background='linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(236, 72, 153, 0.1))'; this.style.borderColor='rgba(236, 72, 153, 0.3)'" data-i18n="quick_action_create_promo">📝 Создать промо</button>
-                  <button style="padding: 1rem; background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1)); border: 1px solid rgba(34, 197, 94, 0.3); color: #86efac; border-radius: 0.75rem; cursor: pointer; font-weight: 600; text-align: left; transition: all 0.3s; font-size: 0.875rem;" onmouseover="this.style.background='linear-gradient(135deg, rgba(34, 197, 94, 0.3), rgba(34, 197, 94, 0.2))'; this.style.borderColor='rgba(34, 197, 94, 0.6)'" onmouseout="this.style.background='linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1))'; this.style.borderColor='rgba(34, 197, 94, 0.3)'" data-i18n="quick_action_view_report">📊 Просмотр отчёта</button>
-                </div>
-              </div>
+        <div class="service">
+          <div class="service__num">7</div>
+          <h3 data-i18n="svc6_title">Автоматизация бизнес-процессов</h3>
+          <p data-i18n="svc6_desc">Перенесём рутину в систему: CRM, учёт финансов, обработка заявок и отчётность в удобной админ-панели. Свяжем её с платёжными и другими сервисами</p>
+          <a href="/services/automation" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
 
-              <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 1rem; padding: 1.5rem;">
-                <h4 style="color: white; font-size: 1rem; font-weight: 700; margin: 0 0 1rem 0;" data-i18n="notifications_title">📌 Уведомления</h4>
-                <div style="display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.875rem;">
-                  <div style="padding: 0.75rem; background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; border-radius: 0.5rem; color: rgba(255, 255, 255, 0.9);" data-i18n="notification1">✓ Новый заказ получен</div>
-                  <div style="padding: 0.75rem; background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; border-radius: 0.5rem; color: rgba(255, 255, 255, 0.9);" data-i18n="notification2">📦 Товар добавлен в избранное</div>
-                  <div style="padding: 0.75rem; background: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; border-radius: 0.5rem; color: rgba(255, 255, 255, 0.9);" data-i18n="notification3">⚠ 3 товара с низким запасом</div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="service">
+          <div class="service__num">8</div>
+          <h3 data-i18n="svc8_title">Дипломный проект</h3>
+          <p data-i18n="svc8_desc">Разработаем практическую часть диплома по вашей теме: сайт, веб-приложение, бот или AI-агент — с понятным кодом и пояснениями</p>
+          <a href="/services/diploma" class="link" data-i18n="svc_more">Подробнее</a>
+        </div>
+      </div>
+
+      <div class="banner banner--tight">
+        <div class="banner__text">
+          <h2 data-i18n="svc_cta_title">Свяжитесь с нами</h2>
+          <p data-i18n="svc_cta_desc">Обсудим ваш проект, сроки и стоимость</p>
+        </div>
+        <div class="banner__actions">
+          <a href="#contact" class="btn btn--white" data-i18n="svc_cta_btn">Связаться</a>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- BACKLINK ANALYSIS SECTION (NEW) -->
-  <section id="features" class="feature-section relative"
-    style="padding: 8rem 0; background: var(--color-bg-secondary);">
+  {% include 'partials/how.html' %}
+
+  <!-- PORTFOLIO SECTION -->
+  <section class="section">
     <div class="container">
-      <div class="feature-content reverse fade-in">
-        <div class="feature-text" style="order: 2;">
-          <h2>
-            <span data-i18n="features_title">Полный спектр</span> <span class="gradient-text" data-i18n="features_title_gradient">веб-услуг</span>
-          </h2>
-          <p style="font-size: 1.25rem; margin-bottom: 2rem;" data-i18n="features_subtitle">
-            От концепции до запуска, мы предоставляем комплексные решения по веб-разработке и дизайну.
-          </p>
-
-          <div class="feature-list">
-            <div class="feature-list-item">
-              <div class="feature-list-icon">🎨</div>
-              <div>
-                <div class="feature-list-title" data-i18n="feature1_title">Пользовательский веб-дизайн</div>
-                <div class="feature-list-description" data-i18n="feature1_desc">Потрясающие современные дизайны, адаптированные под вашу марку</div>
-              </div>
-            </div>
-
-            <div class="feature-list-item">
-              <div class="feature-list-icon">⚙️</div>
-              <div>
-                <div class="feature-list-title" data-i18n="feature2_title">Полнофункциональная разработка</div>
-                <div class="feature-list-description" data-i18n="feature2_desc">Фронтенд, бэкенд и решения БД с использованием новейших технологий</div>
-              </div>
-            </div>
-
-            <div class="feature-list-item">
-              <div class="feature-list-icon">🚀</div>
-              <div>
-                <div class="feature-list-title" data-i18n="feature3_title">Развертывание и поддержка</div>
-                <div class="feature-list-description" data-i18n="feature3_desc">Хостинг, техническое обслуживание и техподдержка включены</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="feature-visual" style="order: 1;">
-          <div class="backlink-mockup float-animation">
-            <div class="backlink-header">
-              <h3 style="font-size: 1.125rem; margin-bottom: 1.5rem;" data-i18n="portfolio_header">Портфолио проектов</h3>
-            </div>
-            <div class="backlink-stats-grid">
-              <div class="backlink-stat">
-                <div class="backlink-stat-value" data-i18n="portfolio_stat1_value">50+</div>
-                <div class="backlink-stat-label" data-i18n="portfolio_stat1_label">Завершено проектов</div>
-              </div>
-              <div class="backlink-stat">
-                <div class="backlink-stat-value" data-i18n="portfolio_stat2_value">99%</div>
-                <div class="backlink-stat-label" data-i18n="portfolio_stat2_label">Удовлетворение клиентов</div>
-              </div>
-            </div>
-
-            <div class="backlink-list">
-              <div class="backlink-item">
-                <div class="backlink-domain">
-                  <div class="domain-favicon" style="background: linear-gradient(135deg, #a855f7, #d946ef);">E</div>
-                  <div>
-                    <div class="domain-name" data-i18n="project1_title">Платформа электронной торговли</div>
-                    <div class="domain-url" data-i18n="project1_subtitle">Пользовательское решение для магазина...</div>
-                  </div>
-                </div>
-                <div class="backlink-metrics">
-                  <span class="da-badge">Python</span>
-                  <span class="da-badge">Django</span>
-                  <span class="status-badge dofollow" data-i18n="project1_status">Работает</span>
-                </div>
-              </div>
-
-              <div class="backlink-item">
-                <div class="backlink-domain">
-                  <div class="domain-favicon" style="background: linear-gradient(135deg, #06b6d4, #0ea5e9);">C</div>
-                  <div>
-                    <div class="domain-name" data-i18n="project2_title">Корпоративный сайт</div>
-                    <div class="domain-url" data-i18n="project2_subtitle">Профессиональное присутствие...</div>
-                  </div>
-                </div>
-                <div class="backlink-metrics">
-                  <span class="da-badge">Django</span>
-                  <span class="status-badge dofollow" data-i18n="project2_status">Работает</span>
-                </div>
-              </div>
-
-              <div class="backlink-item">
-                <div class="backlink-domain">
-                  <div class="domain-favicon" style="background: linear-gradient(135deg, #f59e0b, #f97316);">П</div>
-                  <div>
-                    <div class="domain-name" data-i18n="project3_title">Портфолио</div>
-                    <div class="domain-url" data-i18n="project3_subtitle">Творческая витрина...</div>
-                  </div>
-                </div>
-                <div class="backlink-metrics">
-                  <span class="da-badge">HTML</span>
-                  <span class="da-badge">CSS</span>
-                  <span class="status-badge dofollow" data-i18n="project3_status">Работает</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="heading heading--row">
+        <h2 data-i18n="nav_portfolio">Портфолио</h2>
+        <a href="/portfolio" class="more-link">
+          <span data-i18n="portfolio_all">Все проекты</span>
+          <svg class="icon"><use href="#i-chevron"/></svg>
+        </a>
       </div>
+
+      {% for card in cases %}
+      {% include 'partials/project_card.html' %}
+      {% endfor %}
+
+      <a href="#contact" class="btn btn--accent btn--wide" data-i18n="header_cta">Обсудить проект</a>
     </div>
   </section>
 
-  <!-- FAQ SECTION (NEW) -->
-  <section id="faq" class="section relative">
+  <!-- FAQ SECTION -->
+  <section id="faq" class="section">
     <div class="container">
-      <div class="section-header text-center mb-lg">
-        <h2><span data-i18n="faq_title">Часто задаваемые</span> <span class="gradient-text" data-i18n="faq_title_gradient">вопросы</span></h2>
-        <p style="color: var(--color-text-secondary); font-size: 1.125rem; margin-top: 1rem;" data-i18n="faq_subtitle">
-          Все, что вам нужно знать о DevIX
-        </p>
+      <div class="heading">
+        <h2><span data-i18n="faq_title">Часто задаваемые</span> <span data-i18n="faq_title_gradient">вопросы</span></h2>
       </div>
 
       <div class="faq-container">
-        <div class="faq-item fade-in">
-          <div class="faq-question">
+        <div class="faq-item">
+          <button type="button" class="faq-question">
             <span data-i18n="faq1_question">Каков ваш процесс разработки?</span>
-            <span class="faq-icon">+</span>
-          </div>
+            <span class="faq-icon"></span>
+          </button>
           <div class="faq-answer" data-i18n="faq1_answer">
             Мы следуем проверенной методологии: исследование и планирование, дизайн, разработка, тестирование и развертывание. Мы постоянно держим вас в курсе, проводя регулярные демонстрации и сеансы обратной связи.
           </div>
         </div>
 
-        <div class="faq-item fade-in" style="transition-delay: 0.1s;">
-          <div class="faq-question">
+        <div class="faq-item">
+          <button type="button" class="faq-question">
             <span data-i18n="faq2_question">Какие технологии вы используете?</span>
-            <span class="faq-icon">+</span>
-          </div>
+            <span class="faq-icon"></span>
+          </button>
           <div class="faq-answer" data-i18n="faq2_answer">
             Мы разрабатываем сайты и веб-приложения на современном стеке: Django, Python, JavaScript, HTML, CSS. Подбираем архитектуру и технологии под задачи бизнеса, чтобы продукт был быстрым, надёжным и масштабируемым.
           </div>
         </div>
 
-        <div class="faq-item fade-in" style="transition-delay: 0.2s;">
-          <div class="faq-question">
+        <div class="faq-item">
+          <button type="button" class="faq-question">
             <span data-i18n="faq3_question">Вы предоставляете постоянную поддержку?</span>
-            <span class="faq-icon">+</span>
-          </div>
+            <span class="faq-icon"></span>
+          </button>
           <div class="faq-answer" data-i18n="faq3_answer">
             Да! Мы предлагаем пакеты обслуживания, управление хостингом и техническую поддержку. Мы здесь, чтобы помочь вашему веб-сайту процветать после запуска.
           </div>
         </div>
 
-        <div class="faq-item fade-in" style="transition-delay: 0.3s;">
-          <div class="faq-question">
+        <div class="faq-item">
+          <button type="button" class="faq-question">
             <span data-i18n="faq4_question">Какой типичный график проекта?</span>
-            <span class="faq-icon">+</span>
-          </div>
+            <span class="faq-icon"></span>
+          </button>
           <div class="faq-answer" data-i18n="faq4_answer">
             График зависит от сложности, но большинство проектов занимают 1-4 недели. Мы предоставляем подробные временные графики на этапе планирования и беремся за реалистичные сроки.
           </div>
         </div>
 
-        <div class="faq-item fade-in" style="transition-delay: 0.4s;">
-          <div class="faq-question">
+        <div class="faq-item">
+          <button type="button" class="faq-question">
             <span data-i18n="faq5_question">Заключается ли договор на услуги?</span>
-            <span class="faq-icon">+</span>
-          </div>
+            <span class="faq-icon"></span>
+          </button>
           <div class="faq-answer" data-i18n="faq5_answer">
             Да, мы работаем по договору. Договор может быть подписан в электронном виде и имеет юридическую силу. Все условия сотрудничества (сроки, стоимость, техническое задание) заранее согласовываются и закрепляются документально.
           </div>
@@ -454,36 +180,4 @@
       </div>
     </div>
   </section>
-
-  <!-- CTA SECTION -->
-  <section id="pricing" class="cta-section relative">
-    <div class="container">
-      <div class="cta-content">
-        <h2 id="contact"><span data-i18n="cta_title">Готовы создать свое</span>
-          <span class="gradient-text" data-i18n="cta_title_gradient">онлайн присутствие?</span>
-        </h2>
-
-        <p style="font-size: 1.25rem; color: var(--color-text-secondary); max-width: 700px; margin: 0 auto 3rem;" data-i18n="cta_subtitle">
-          Давайте обсудим ваш проект и создадим что-то невероятное вместе.
-        </p>
-
-        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-          <a href="https://wa.me/+77776183053?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5!%20%D0%A5%D0%BE%D1%87%D1%83%20%D0%BF%D0%BE%D0%BB%D1%83%D1%87%D0%B8%D1%82%D1%8C%20%D0%BA%D0%BE%D0%BD%D1%81%D1%83%D0%BB%D1%8C%D1%82%D0%B0%D1%86%D0%B8%D1%8E%20%D0%BF%D0%BE%20%D1%80%D0%B0%D0%B7%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D0%BA%D0%B5%20%D1%81%D0%B0%D0%B9%D1%82%D0%B0." class="btn btn-primary btn-large" target="_blank" data-i18n="cta_btn">Запланировать консультацию</a>
-        </div>
-
-        <p style="font-size: 0.875rem; color: var(--color-text-muted); margin-top: 1rem;" data-i18n="cta_note">
-          🚀 Бесплатная консультация • Без обязательств • Давайте поговорим!
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  {% include 'partials/footer.html' %}
-
-  <!-- JavaScript -->
-  <script src="{% static 'js/script.js' %}?v=2"></script>
-  <script src="{% static 'js/contact-form.js' %}?v=2"></script>
-</body>
-
-</html>
+{% endblock %}

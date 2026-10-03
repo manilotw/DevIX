@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}DevIX | Контакты{% endblock %}
+{% block description %}DevIX - Контакты: телефон, email, WhatsApp, Telegram и Instagram. Свяжитесь с нами и обсудим ваш проект.{% endblock %}
+{% block title_key %}page_title_contacts{% endblock %}
+
+{% block content %}
+  <!-- CONTACTS SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="heading heading--page">
+        <h1 data-i18n="nav_contacts">Контакты</h1>
+      </div>
+
+      <div class="info">
+        <div class="info__row">
+          <h2 data-i18n="contacts_reach_title">Связаться с нами</h2>
+          <div>
+            <a href="mailto:manilotcollab@gmail.com">manilotcollab@gmail.com</a>
+            <a href="tel:+77776183053">+7 777 618 30 53</a>
+          </div>
+        </div>
+
+        <div class="info__row">
+          <h2 data-i18n="contacts_messengers_title">Мессенджеры</h2>
+          <div>
+            <a href="https://wa.me/+77776183053" target="_blank" rel="noopener">WhatsApp: +7 777 618 30 53</a>
+            <a href="https://t.me/devixco" target="_blank" rel="noopener">Telegram: @devixco</a>
+          </div>
+        </div>
+
+        <div class="info__row">
+          <h2 data-i18n="contacts_social_title">Соцсети</h2>
+          <div>
+            <a href="https://www.instagram.com/devixco" target="_blank" rel="noopener">Instagram: @devixco</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

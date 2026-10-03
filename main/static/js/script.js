@@ -77,111 +77,92 @@ function animateParticles() {
 }
 
 // Initialize particles
+// On phones the viewport height changes every time the address bar hides, so the
+// particles are rebuilt only when the width changes; otherwise they would jump on scroll.
+let particlesWidth = window.innerWidth;
+
 window.addEventListener('resize', () => {
+    const widthChanged = window.innerWidth !== particlesWidth;
+    particlesWidth = window.innerWidth;
     resizeCanvas();
-    initParticles();
+    if (widthChanged) {
+        initParticles();
+    }
 });
 
 resizeCanvas();
 initParticles();
-animateParticles();
 
-// ==================== SCROLL ANIMATIONS ====================
-const observerOptions = {
-    threshold: 0.15,
-    rootMargin: '0px 0px -100px 0px'
-};
+if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    // a still frame instead of the animation
+    particles.forEach(particle => particle.draw());
+} else {
+    animateParticles();
+}
 
-const fadeObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-        }
-    });
-}, observerOptions);
-
+// ==================== MOBILE MENU ====================
 document.addEventListener('DOMContentLoaded', () => {
-    const fadeElements = document.querySelectorAll('.fade-in, .advanced-mockup');
-    fadeElements.forEach(el => fadeObserver.observe(el));
-});
+    const header = document.getElementById('header');
+    const burger = document.getElementById('burger');
+    const menu = document.getElementById('headerMenu');
 
-// ==================== SMOOTH SCROLL ====================
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            const headerOffset = 80;
-            const elementPosition = target.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+    if (!header || !burger || !menu) return;
 
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+    const compact = window.matchMedia('(max-width: 1199px)');
+
+    function setOpen(open) {
+        header.classList.toggle('is-open', open);
+        document.body.classList.toggle('menu-open', open);
+        burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    burger.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setOpen(!header.classList.contains('is-open'));
+    });
+
+    // "Услуги" opens as an accordion in the mobile menu
+    menu.querySelectorAll('.nav__toggle').forEach(toggle => {
+        toggle.addEventListener('click', () => {
+            if (compact.matches) {
+                toggle.parentElement.classList.toggle('is-open');
+            }
+        });
+    });
+
+    // Close menu when clicking on links
+    header.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => setOpen(false));
+    });
+
+    // Close menu when clicking outside, on Escape and when the layout becomes desktop
+    document.addEventListener('click', (e) => {
+        if (!header.contains(e.target)) {
+            setOpen(false);
         }
     });
-});
 
-// ==================== STICKY HEADER SCROLL EFFECT ====================
-const header = document.querySelector('.sticky-header');
-let lastScroll = 0;
-
-window.addEventListener('scroll', () => {
-    const currentScroll = window.pageYOffset;
-
-    if (currentScroll > 100) {
-        header.style.background = 'rgba(0, 0, 0, 0.95)';
-        header.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.3)';
-    } else {
-        header.style.background = 'rgba(0, 0, 0, 0.8)';
-        header.style.boxShadow = 'none';
-    }
-
-    lastScroll = currentScroll;
-});
-
-// ==================== PARALLAX GLOW EFFECT ====================
-const purpleGlows = document.querySelectorAll('.purple-glow');
-
-document.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX;
-    const mouseY = e.clientY;
-
-    purpleGlows.forEach((glow, index) => {
-        const speed = (index + 1) * 0.015;
-        const x = (mouseX - window.innerWidth / 2) * speed;
-        const y = (mouseY - window.innerHeight / 2) * speed;
-
-        glow.style.transform = `translate(${x}px, ${y}px)`;
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            setOpen(false);
+        }
     });
+
+    compact.addEventListener('change', () => setOpen(false));
 });
 
-// ==================== HERO PARALLAX ====================
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const heroContent = document.querySelector('.hero-content');
+// ==================== ACTIVE NAV LINK ====================
+function highlightActiveLink() {
+    const currentPath = window.location.pathname.replace(/^\/(ru|en)(?=\/|$)/, '').replace(/\/$/, '');
 
-    if (heroContent && scrolled < window.innerHeight) {
-        const translateY = scrolled * 0.3;
-        const opacity = 1 - (scrolled / window.innerHeight * 0.8);
+    document.querySelectorAll('.nav > a').forEach(link => {
+        const href = (link.getAttribute('href') || '').replace(/^\/(ru|en)(?=\/|$)/, '').replace(/\/$/, '');
+        link.classList.toggle('active', href !== '' && !href.includes('#') && href === currentPath);
+    });
+}
 
-        heroContent.style.transform = `translateY(${translateY}px)`;
-        heroContent.style.opacity = opacity;
-    }
-});
-
-// ==================== 3D GRID PERSPECTIVE ====================
-const perspectiveGrid = document.querySelector('.perspective-grid');
-
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
-    const rotation = Math.min(60 + (scrolled * 0.01), 70);
-
-    if (perspectiveGrid) {
-        perspectiveGrid.style.transform = `perspective(500px) rotateX(${rotation}deg)`;
-    }
-});
+document.addEventListener('DOMContentLoaded', highlightActiveLink);
+window.addEventListener('pageshow', highlightActiveLink);
 
 // ==================== FAQ ACCORDION ====================
 document.addEventListener('DOMContentLoaded', () => {
@@ -202,101 +183,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
-
-// ==================== FLOATING ANIMATION TRIGGER ====================
-const floatingElements = document.querySelectorAll('.float-animation');
-
-floatingElements.forEach((el, index) => {
-    el.style.animationDelay = `${index * 0.2}s`;
-});
-
-// ==================== MOCKUP TAB INTERACTION ====================
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.mockup-tab');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-        });
-    });
-});
-
-// ==================== INTERACTIVE HOVER EFFECTS ====================
-const metricCards = document.querySelectorAll('.metric-card-advanced');
-
-metricCards.forEach(card => {
-    card.addEventListener('mouseenter', function () {
-        this.style.transform = 'translateX(8px) scale(1.02)';
-    });
-
-    card.addEventListener('mouseleave', function () {
-        this.style.transform = 'translateX(0) scale(1)';
-    });
-});
-
-// ==================== TABLE ROW HIGHLIGHT ====================
-const tableRows = document.querySelectorAll('.table-row');
-
-tableRows.forEach(row => {
-    row.addEventListener('click', function () {
-        tableRows.forEach(r => r.style.background = 'transparent');
-        this.style.background = 'rgba(255, 255, 255, 0.05)';
-    });
-});
-
-// ==================== BACKLINK ITEM INTERACTION ====================
-const backlinkItems = document.querySelectorAll('.backlink-item');
-
-backlinkItems.forEach(item => {
-    item.addEventListener('click', function () {
-        const domain = this.querySelector('.domain-name').textContent;
-        console.log(`Clicked on backlink from: ${domain}`);
-        // Could trigger a modal or expand details here
-    });
-});
-
-// ==================== PERFORMANCE OPTIMIZATION ====================
-let scrollTimeout;
-let ticking = false;
-
-window.addEventListener('scroll', () => {
-    if (!ticking) {
-        window.requestAnimationFrame(() => {
-            // Perform scroll-based calculations here
-            ticking = false;
-        });
-
-        ticking = true;
-    }
-}, { passive: true });
-
-// ==================== CONSOLE BRANDING ====================
-console.log('%c AmirzhanFree ', 'background: linear-gradient(135deg, #ffffff, #a3a3a3); color: #000; font-size: 24px; padding: 12px; font-weight: bold; border-radius: 8px;');
-console.log('%c New Era of Digital Research 🚀', 'color: #ffffff; font-size: 16px; font-weight: 600;');
-console.log('%c Powered by AI • Built for Performance', 'color: #666; font-size: 12px;');
-
-// ==================== EASTER EGG ====================
-let konami = [];
-const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
-
-document.addEventListener('keydown', (e) => {
-    konami.push(e.key);
-    konami = konami.slice(-konamiCode.length);
-
-    if (konami.join('') === konamiCode.join('')) {
-        document.body.style.animation = 'rainbow 2s infinite';
-        setTimeout(() => {
-            document.body.style.animation = '';
-            alert('🎉 You found the secret! AmirzhanFree Developer Mode Activated!');
-        }, 2000);
-    }
-});
-
-// ==================== PAGE LOAD ANALYTICS (MOCK) ====================
-window.addEventListener('load', () => {
-    console.log('📊 Page loaded in:', performance.now().toFixed(2), 'ms');
-    console.log('🎨 Particles initialized:', particles.length);
-    console.log('✨ All animations ready!');
 });

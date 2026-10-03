@@ -1,0 +1,14 @@
+{% load static %}
+<article class="project{% if light %} project--light{% endif %}">
+  {% if card.tag %}<span class="project__tag">{{ card.tag }}</span>{% endif %}
+  <div class="project__body">
+    <h3 data-i18n="{{ card.title.key }}">{{ card.title.text }}</h3>
+    <p data-i18n="{{ card.desc.key }}">{{ card.desc.text }}</p>
+    <a href="{{ card.url }}" class="btn btn--outline" data-i18n="portfolio_view">Подробнее</a>
+  </div>
+  {% if card.image %}
+  <img class="project__image" src="{% static card.image %}" alt="{{ card.title.text }}" loading="lazy">
+  {% else %}
+  {% include 'partials/cover.html' with key=card.title.key text=card.title.text extra='project__image' %}
+  {% endif %}
+</article>
