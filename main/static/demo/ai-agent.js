@@ -2,6 +2,7 @@
 // Писать в чат нельзя: сообщения заготовлены и появляются по одному, пока посетитель
 // листает страницу вниз. Настоящей модели и бэкенда здесь нет.
 (function () {
+  const t = window.demoText; // перевод строки на язык страницы (см. templates/demo/_bar.html)
   // картинки лежат в static/img/demo/ai
   const IMG = '/static/img/demo/ai/';
   const PODS = `<img src="${IMG}pods.jpg" alt="">`;
@@ -9,35 +10,35 @@
     `<div class="item">${PODS}<div><b>${name}</b><span>${note}</span><em>${price}</em></div></div>`;
 
   const MESSAGES = [
-    { from: 'user', html: '<p>Здравствуйте!</p>' },
-    { from: 'agent', html: '<p>Здравствуйте! Я AI-ассистент магазина. Помогу выбрать товар, расскажу о наличии и доставке и оформлю заказ. Что вас интересует?</p>' },
-    { from: 'user', html: '<p>Ищу беспроводные наушники для работы и перелётов. Бюджет — до 90 000 ₸.</p>' },
+    { from: 'user', html: t('<p>Здравствуйте!</p>') },
+    { from: 'agent', html: t('<p>Здравствуйте! Я AI-ассистент магазина. Помогу выбрать товар, расскажу о наличии и доставке и оформлю заказ. Что вас интересует?</p>') },
+    { from: 'user', html: t('<p>Ищу беспроводные наушники для работы и перелётов. Бюджет — до 90 000 ₸.</p>') },
     {
       from: 'agent',
-      html: '<p>В этот бюджет подходят две модели, обе есть в наличии:</p>' +
-        `<div class="cards">${product('Air Pro', '79 990 ₸', 'Шумоподавление, 30 часов')}${product('Air Lite', '49 990 ₸', 'Без шумоподавления, 24 часа')}</div>` +
-        '<p>Для перелётов советую Air Pro: шумоподавление глушит гул самолёта.</p>',
+      html: t('<p>В этот бюджет подходят две модели, обе есть в наличии:</p>') +
+        `<div class="cards">${product('Air Pro', '79 990 ₸', t('Шумоподавление, 30 часов'))}${product('Air Lite', '49 990 ₸', t('Без шумоподавления, 24 часа'))}</div>` +
+        t('<p>Для перелётов советую Air Pro: шумоподавление глушит гул самолёта.</p>'),
     },
-    { from: 'user', html: '<p>А чем ещё Pro лучше, кроме шумоподавления?</p>' },
+    { from: 'user', html: t('<p>А чем ещё Pro лучше, кроме шумоподавления?</p>') },
     {
       from: 'agent',
-      html: '<p>Вот главное в сравнении:</p>' +
+      html: t('<p>Вот главное в сравнении:</p>') +
         '<table class="compare"><tr><th></th><th>Air Pro</th><th>Air Lite</th></tr>' +
-        '<tr><td>Без подзарядки</td><td>30 часов</td><td>24 часа</td></tr>' +
-        '<tr><td>Быстрая зарядка</td><td>10 минут = 5 часов</td><td>нет</td></tr>' +
-        '<tr><td>Подключение</td><td>2 устройства сразу</td><td>1 устройство</td></tr>' +
-        '<tr><td>Микрофоны</td><td>6, с подавлением шума</td><td>2</td></tr></table>' +
-        '<p>Если часто летаете и много созваниваетесь, разница в цене себя оправдает.</p>',
+        t('<tr><td>Без подзарядки</td><td>30 часов</td><td>24 часа</td></tr>') +
+        t('<tr><td>Быстрая зарядка</td><td>10 минут = 5 часов</td><td>нет</td></tr>') +
+        t('<tr><td>Подключение</td><td>2 устройства сразу</td><td>1 устройство</td></tr>') +
+        t('<tr><td>Микрофоны</td><td>6, с подавлением шума</td><td>2</td></tr></table>') +
+        t('<p>Если часто летаете и много созваниваетесь, разница в цене себя оправдает.</p>'),
     },
-    { from: 'user', html: '<p>Убедили. Есть в белом цвете? И сколько идёт доставка в Астану?</p>' },
-    { from: 'agent', html: '<p>Белые есть, на складе 4 штуки. Доставка курьером в Астану займёт 1–2 дня, для заказов от 50 000 ₸ она бесплатная.</p><p>Оформить заказ на адрес из вашего профиля?</p>' },
-    { from: 'user', html: '<p>Да, оформляйте.</p>' },
+    { from: 'user', html: t('<p>Убедили. Есть в белом цвете? И сколько идёт доставка в Астану?</p>') },
+    { from: 'agent', html: t('<p>Белые есть, на складе 4 штуки. Доставка курьером в Астану займёт 1–2 дня, для заказов от 50 000 ₸ она бесплатная.</p><p>Оформить заказ на адрес из вашего профиля?</p>') },
+    { from: 'user', html: t('<p>Да, оформляйте.</p>') },
     {
       from: 'agent',
-      html: '<p>Готово, заказ оформлен ✅</p>' +
-        `<div class="order">${PODS}<div><b>Air Pro, белые</b><span>Заказ № 1249 · курьером в Астану, 1–2 дня</span><em>79 990 ₸</em></div>` +
-        '<span class="order__ok"><svg><use href="#a-check"/></svg>Оформлен</span></div>' +
-        '<p>Ссылку на оплату отправил сюда и на вашу почту. Напишу, когда заказ передадут курьеру.</p>',
+      html: t('<p>Готово, заказ оформлен ✅</p>') +
+        `<div class="order">${PODS}<div><b>${t('Air Pro, белые')}</b><span>${t('Заказ № 1249 · курьером в Астану, 1–2 дня')}</span><em>79 990 ₸</em></div>` +
+        t('<span class="order__ok"><svg><use href="#a-check"/></svg>Оформлен</span></div>') +
+        t('<p>Ссылку на оплату отправил сюда и на вашу почту. Напишу, когда заказ передадут курьеру.</p>'),
     },
   ];
 
@@ -69,7 +70,7 @@
   function update() {
     const done = shown === STEPS;
     $('hintCount').textContent = `${shown} / ${STEPS}`;
-    $('hintText').innerHTML = done ? 'Диалог завершён' : HINT;
+    $('hintText').innerHTML = done ? t('Диалог завершён') : HINT;
     $('hintArrow').style.display = done ? 'none' : '';
     $('showAll').hidden = done;
     $('restart').hidden = !done;
@@ -90,7 +91,7 @@
     const agent = message.from === 'agent';
     const node = document.createElement('div');
     node.className = `msg msg--${message.from}`;
-    node.innerHTML = `<span class="msg__avatar"><img src="${IMG}${agent ? 'robot' : 'user'}.jpg" alt="${agent ? 'Агент' : 'Покупатель'}"></span><div class="bubble"></div>`;
+    node.innerHTML = `<span class="msg__avatar"><img src="${IMG}${agent ? 'robot' : 'user'}.jpg" alt="${agent ? t('Агент') : t('Покупатель')}"></span><div class="bubble"></div>`;
     const bubble = node.lastElementChild;
     msgs.append(node);
 

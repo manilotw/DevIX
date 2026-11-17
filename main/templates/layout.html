@@ -25,11 +25,19 @@
   <meta property="og:description" content="{{ meta.description }}">
   <meta property="og:url" content="{{ meta.canonical }}">
   <meta property="og:image" content="{{ meta.image }}">
+  {% if meta.image_size %}
+  <meta property="og:image:width" content="{{ meta.image_size.0 }}">
+  <meta property="og:image:height" content="{{ meta.image_size.1 }}">
+  {% endif %}
+  <meta property="og:image:alt" content="{{ meta.title }}">
   <meta property="og:locale" content="{{ meta.locale }}">
   {% for locale in meta.other_locales %}
   <meta property="og:locale:alternate" content="{{ locale }}">
   {% endfor %}
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ meta.title }}">
+  <meta name="twitter:description" content="{{ meta.description }}">
+  <meta name="twitter:image" content="{{ meta.image }}">
   <meta name="theme-color" content="#000000">
 
   <!-- Structured data -->
@@ -45,7 +53,7 @@
   <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261117g">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261117h">
 
   <!-- Language -->
   <script>
@@ -68,7 +76,7 @@
 
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/static/js/${lang}.json?v=20261117g`, false);
+        xhr.open('GET', `/static/js/${lang}.json?v=20261117h`, false);
         xhr.send();
 
         if (xhr.status === 200) {
@@ -113,12 +121,17 @@
           const key = el.getAttribute('data-i18n-label');
           if (t[key]) el.setAttribute('data-label', t[key]);
         });
+
+        document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+          const key = el.getAttribute('data-i18n-alt');
+          if (t[key]) el.alt = t[key];
+        });
       }
     })();
   </script>
 
   <!-- Language Translator Script -->
-  <script src="{% static 'js/translator.js' %}?v=20261117g"></script>
+  <script src="{% static 'js/translator.js' %}?v=20261117h"></script>
   {% block extra_head %}{% endblock %}
 </head>
 
@@ -138,7 +151,7 @@
   {% include 'partials/footer.html' %}
 
   <!-- JavaScript -->
-  <script src="{% static 'js/script.js' %}?v=20261117g"></script>
+  <script src="{% static 'js/script.js' %}?v=20261117h"></script>
   {% block extra_js %}{% endblock %}
 </body>
 

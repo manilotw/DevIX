@@ -6,6 +6,15 @@
   <a href="{{ contact_url }}" class="dx-bar__cta">Хочу такой проект</a>
 </div>
 <script>
+  // Перевод строк в скриптах демо. На английской странице сервер кладёт словарь
+  // в window.DEMO_T (main/demo_en/*.json), на русской строки остаются как есть.
+  // {имя} в строке заменяется значением из vars.
+  window.demoText = function (text, vars) {
+    var result = (window.DEMO_T && window.DEMO_T[text]) || text;
+    for (var name in vars) result = result.replace('{' + name + '}', vars[name]);
+    return result;
+  };
+
   (function () {
     // Стрелка возвращает на страницу, с которой пришли. Если демо открыли по прямой
     // ссылке, возвращаться некуда - тогда она ведёт к списку демо (адрес в href).

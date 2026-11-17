@@ -1,28 +1,29 @@
 // Демо «Интернет-магазин»: каталог, избранное, корзина и оформление заказа.
 // Бэкенда нет: всё хранится в памяти страницы и пропадает при обновлении.
 (function () {
+  const t = window.demoText; // перевод строки на язык страницы (см. templates/demo/_bar.html)
   // фото товаров лежат в static/img/demo/shop
   const IMG = '/static/img/demo/shop/';
   const PRODUCTS = [
-    { id: 1, name: 'Беспроводные наушники', price: 79990, cat: 'accessories', img: 'headphones', hit: true, desc: 'Активное шумоподавление и до 30 часов работы без подзарядки.' },
-    { id: 2, name: 'Смарт-часы', price: 129990, cat: 'accessories', img: 'watch', hit: true, isNew: true, desc: 'Пульс, сон и тренировки на ярком экране. Держат заряд до 5 дней.' },
-    { id: 3, name: 'Кроссовки Urban', price: 54990, cat: 'shoes', img: 'sneakers', hit: true, desc: 'Лёгкие кроссовки из кожи и замши на каждый день.' },
-    { id: 4, name: 'Сумка Classic', price: 89990, cat: 'accessories', img: 'cat-bag', isNew: true, desc: 'Сумка из плотной кожи с короткой ручкой и съёмным ремнём.' },
-    { id: 5, name: 'Свитер оверсайз', price: 31990, old: 39990, cat: 'clothes', img: 'cat-clothes', desc: 'Мягкий свитер свободного кроя из шерсти мериноса.' },
-    { id: 6, name: 'Солнцезащитные очки', price: 27990, old: 34990, cat: 'accessories', img: 'sunglasses', desc: 'Линзы с защитой UV400 в лёгкой ацетатной оправе.' },
-    { id: 7, name: 'Настольная лампа', price: 24990, cat: 'home', img: 'lamp', isNew: true, desc: 'Матовое рифлёное стекло и тёплый рассеянный свет. Работает от USB.' },
-    { id: 8, name: 'Аромадиффузор', price: 14990, cat: 'home', img: 'diffuser', pos: 'center 80%', desc: 'Стеклянный флакон с палочками. Аромат сандала и ванили, хватает на 2 месяца.' },
+    { id: 1, name: t('Беспроводные наушники'), price: 79990, cat: 'accessories', img: 'headphones', hit: true, desc: t('Активное шумоподавление и до 30 часов работы без подзарядки.') },
+    { id: 2, name: t('Смарт-часы'), price: 129990, cat: 'accessories', img: 'watch', hit: true, isNew: true, desc: t('Пульс, сон и тренировки на ярком экране. Держат заряд до 5 дней.') },
+    { id: 3, name: t('Кроссовки Urban'), price: 54990, cat: 'shoes', img: 'sneakers', hit: true, desc: t('Лёгкие кроссовки из кожи и замши на каждый день.') },
+    { id: 4, name: t('Сумка Classic'), price: 89990, cat: 'accessories', img: 'cat-bag', isNew: true, desc: t('Сумка из плотной кожи с короткой ручкой и съёмным ремнём.') },
+    { id: 5, name: t('Свитер оверсайз'), price: 31990, old: 39990, cat: 'clothes', img: 'cat-clothes', desc: t('Мягкий свитер свободного кроя из шерсти мериноса.') },
+    { id: 6, name: t('Солнцезащитные очки'), price: 27990, old: 34990, cat: 'accessories', img: 'sunglasses', desc: t('Линзы с защитой UV400 в лёгкой ацетатной оправе.') },
+    { id: 7, name: t('Настольная лампа'), price: 24990, cat: 'home', img: 'lamp', isNew: true, desc: t('Матовое рифлёное стекло и тёплый рассеянный свет. Работает от USB.') },
+    { id: 8, name: t('Аромадиффузор'), price: 14990, cat: 'home', img: 'diffuser', pos: 'center 80%', desc: t('Стеклянный флакон с палочками. Аромат сандала и ванили, хватает на 2 месяца.') },
   ];
 
   const FILTERS = {
-    all: { title: 'Каталог', test: () => true },
-    clothes: { title: 'Одежда', test: (p) => p.cat === 'clothes' },
-    shoes: { title: 'Обувь', test: (p) => p.cat === 'shoes' },
-    accessories: { title: 'Аксессуары', test: (p) => p.cat === 'accessories' },
-    home: { title: 'Для дома', test: (p) => p.cat === 'home' },
-    new: { title: 'Новинки', test: (p) => p.isNew },
-    sale: { title: 'Со скидкой', test: (p) => p.old },
-    fav: { title: 'Избранное', test: (p) => state.fav.has(p.id) },
+    all: { title: t('Каталог'), test: () => true },
+    clothes: { title: t('Одежда'), test: (p) => p.cat === 'clothes' },
+    shoes: { title: t('Обувь'), test: (p) => p.cat === 'shoes' },
+    accessories: { title: t('Аксессуары'), test: (p) => p.cat === 'accessories' },
+    home: { title: t('Для дома'), test: (p) => p.cat === 'home' },
+    new: { title: t('Новинки'), test: (p) => p.isNew },
+    sale: { title: t('Со скидкой'), test: (p) => p.old },
+    fav: { title: t('Избранное'), test: (p) => state.fav.has(p.id) },
   };
 
   const state = { filter: 'all', query: '', fav: new Set(), cart: new Map(), modal: null, modalQty: 1 };
@@ -34,7 +35,7 @@
   const photo = (p) => `<img src="${IMG}${p.img}.jpg" alt="" loading="lazy"${p.pos ? ` style="object-position:${p.pos}"` : ''}>`;
   const priceHtml = (p) => `<div class="price">${money(p.price)}${p.old ? `<s>${money(p.old)}</s>` : ''}</div>`;
   const favHtml = (p) =>
-    `<button type="button" class="icon-btn fav${state.fav.has(p.id) ? ' is-on' : ''}" data-fav="${p.id}" aria-label="В избранное"><svg><use href="#s-heart"/></svg></button>`;
+    `<button type="button" class="icon-btn fav${state.fav.has(p.id) ? ' is-on' : ''}" data-fav="${p.id}" aria-label="${t('В избранное')}"><svg><use href="#s-heart"/></svg></button>`;
 
   // ---------- каталог ----------
 
@@ -49,18 +50,18 @@
     const query = state.query.trim().toLowerCase();
     const list = PRODUCTS.filter((p) => filter.test(p) && (!query || p.name.toLowerCase().includes(query)));
 
-    $('catalogTitle').textContent = query ? `Поиск: «${state.query.trim()}»` : filter.title;
+    $('catalogTitle').textContent = query ? t('Поиск: «{query}»', { query: state.query.trim() }) : filter.title;
     $('empty').hidden = list.length > 0;
     $('grid').innerHTML = list
       .map((p) => {
-        const tag = p.old ? '<span class="tag tag--sale">Скидка</span>' : p.isNew ? '<span class="tag">Новинка</span>' : '';
+        const tag = p.old ? `<span class="tag tag--sale">${t('Скидка')}</span>` : p.isNew ? `<span class="tag">${t('Новинка')}</span>` : '';
         const inCart = state.cart.has(p.id);
         return `<article class="product">
           <span class="product__art" data-open="${p.id}">${photo(p)}${tag}</span>
           <div class="product__body">
             <span class="product__name" data-open="${p.id}">${p.name}</span>
             ${priceHtml(p)}
-            <button type="button" class="btn btn--primary btn--sm${inCart ? ' is-added' : ''}" data-add="${p.id}">${inCart ? 'В корзине' : 'В корзину'}</button>
+            <button type="button" class="btn btn--primary btn--sm${inCart ? ' is-added' : ''}" data-add="${p.id}">${inCart ? t('В корзине') : t('В корзину')}</button>
           </div>
           ${favHtml(p)}
         </article>`;
@@ -103,7 +104,7 @@
     state.cart.set(id, (state.cart.get(id) || 0) + qty);
     renderCart();
     renderGrid();
-    toast(`«${byId(id).name}» в корзине`);
+    toast(t('«{name}» в корзине', { name: byId(id).name }));
   }
 
   function changeQty(id, delta) {
@@ -125,12 +126,12 @@
         <div>
           <b>${p.name}</b><span>${money(p.price)}</span>
           <div class="qty">
-            <button type="button" data-qty="${id}" data-delta="-1" aria-label="Меньше">−</button>
+            <button type="button" data-qty="${id}" data-delta="-1" aria-label="${t('Меньше')}">−</button>
             <span>${qty}</span>
-            <button type="button" data-qty="${id}" data-delta="1" aria-label="Больше">+</button>
+            <button type="button" data-qty="${id}" data-delta="1" aria-label="${t('Больше')}">+</button>
           </div>
         </div>
-        <button type="button" class="icon-btn item__remove" data-remove="${id}" aria-label="Удалить"><svg><use href="#s-close"/></svg></button>
+        <button type="button" class="icon-btn item__remove" data-remove="${id}" aria-label="${t('Удалить')}"><svg><use href="#s-close"/></svg></button>
       </div>`;
     });
 
@@ -147,7 +148,7 @@
     $('stepCart').hidden = name !== 'cart';
     $('stepCheckout').hidden = name !== 'checkout';
     $('stepDone').hidden = name !== 'done';
-    $('drawerTitle').textContent = name === 'checkout' ? 'Оформление заказа' : name === 'done' ? 'Готово' : 'Корзина';
+    $('drawerTitle').textContent = name === 'checkout' ? t('Оформление заказа') : name === 'done' ? t('Готово') : t('Корзина');
   }
 
   function openDrawer() {
@@ -167,7 +168,7 @@
     $('modalName').textContent = p.name;
     $('modalDesc').textContent = p.desc;
     $('modalPrice').innerHTML = money(p.price) + (p.old ? `<s>${money(p.old)}</s>` : '');
-    $('modalTag').textContent = p.old ? 'Скидка' : p.isNew ? 'Новинка' : p.hit ? 'Хит продаж' : '';
+    $('modalTag').textContent = p.old ? t('Скидка') : p.isNew ? t('Новинка') : p.hit ? t('Хит продаж') : '';
     $('modalTag').hidden = !$('modalTag').textContent;
     $('modalQty').textContent = 1;
     $('modal').hidden = false;
@@ -254,9 +255,13 @@
 
     const data = new FormData(checkout);
     const number = 'V-' + (1040 + Math.floor(Math.random() * 900));
-    $('doneText').textContent =
-      `${data.get('name').trim()}, заказ ${number} на ${money(cartTotal())} принят. ` +
-      `${data.get('delivery')}, оплата: ${data.get('pay').toLowerCase()}.`;
+    $('doneText').textContent = t('{name}, заказ {number} на {sum} принят. {delivery}, оплата: {pay}.', {
+      name: data.get('name').trim(),
+      number,
+      sum: money(cartTotal()),
+      delivery: data.get('delivery'),
+      pay: data.get('pay').toLowerCase(),
+    });
 
     state.cart.clear();
     checkout.reset();

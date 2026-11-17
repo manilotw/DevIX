@@ -130,7 +130,7 @@
         {% for item in projects %}
         <a href="{{ item.url }}" class="card example">
           {% if item.image %}
-          <img class="example__image" src="{% static item.image %}" alt="{{ item.title.text }}" loading="lazy">
+          <img class="example__image" src="{% static item.image %}" alt="{{ item.title.text }}" data-i18n-alt="{{ item.title.key }}" loading="lazy">
           {% else %}
           {% include 'partials/cover.html' with key=item.title.key text=item.title.text extra='example__image' %}
           {% endif %}

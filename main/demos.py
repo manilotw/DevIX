@@ -19,15 +19,15 @@ DEMOS = {
 }
 
 
-def demo_cards():
-    """Карточки демо для главной и страницы со списком."""
+def demo_cards(lang='ru'):
+    """Карточки демо для главной и страницы со списком. У английской версии свои превью."""
     t = _translator()
     cards = []
     for slug, config in DEMOS.items():
         p = f"demo_{config['key']}"
         cards.append({
             'url': f'/demo/{slug}/',
-            'image': config['image'],
+            'image': config['image'].replace('img/demo/', 'img/demo/en/') if lang == 'en' else config['image'],
             'tag': t(f'{p}_tag'),
             'title': t(f'{p}_title'),
             'desc': t(f'{p}_desc'),

@@ -11,8 +11,8 @@
   "nav_faq": "FAQ",
   "nav_telegram": "Telegram Bots",
   "hero_badge": "🚀 Create Your Online Presence",
-  "hero_title1": "Modern Web",
-  "hero_title2": "Development",
+  "hero_title1": "Website development",
+  "hero_title2": "for your business",
   "hero_subtitle": "We create stunning, high-performance websites that deliver results. From design to launch, we handle everything your business needs.",
   "hero_btn1": "Get Started",
   "hero_btn2": "View Our Work",
@@ -758,10 +758,10 @@
   "nf_text": "This page does not exist: it may have been removed, or the address is mistyped.",
   "nf_btn": "Back to home",
   "nav_demo": "Demo",
-  "page_title_demo": "Demo Projects: Landing Page, Online Store, CRM, AI Agent | DevIX",
-  "meta_desc_demo": "Try DevIX demo projects: a landing page with a lead form, an online store with a cart, a CRM with sign-up and an AI agent for business. Open them and see how they work.",
+  "page_title_demo": "Demos: Landing Page, Store, CRM, AI Agent, Telegram Bot | DevIX",
+  "meta_desc_demo": "Try DevIX demo projects: a landing page with a lead form, an online store with a cart, a CRM, an AI agent and a Telegram booking bot. Open them and see how they work.",
   "demo_title": "Demo projects",
-  "demo_subtitle": "Open a demo and try how your project could look and work. Demo data is fictional and is not saved anywhere. The demos are currently in Russian.",
+  "demo_subtitle": "Open a demo and try how your project could look and work. Demo data is fictional and is not saved anywhere.",
   "demo_open": "Open demo",
   "demo_landing_tag": "Landing page",
   "demo_landing_title": "Logistics company landing page",
@@ -793,5 +793,6 @@
   "demo_bot_desc": "A Telegram-style chat with the bot: the client picks a service, a specialist, a day and a time — no phone calls",
   "demo_bot_try1": "Tap “Записаться” and go through the four steps",
   "demo_bot_try2": "Reschedule or cancel the booking",
-  "demo_bot_try3": "View services, prices and the address"
+  "demo_bot_try3": "View services, prices and the address",
+  "case_services_title": "Related services"
 }

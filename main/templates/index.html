@@ -8,8 +8,8 @@
   <section class="hero hero--dark">
     <div class="container hero__content">
       <h1>
-        <span data-i18n="hero_title1">Современная веб</span>
-        <span data-i18n="hero_title2">разработка</span>
+        <span data-i18n="hero_title1">Разработка сайтов</span>
+        <span data-i18n="hero_title2">под ключ</span>
       </h1>
 
       <p class="hero__subtitle" data-i18n="hero_subtitle">
@@ -37,7 +37,7 @@
       <div class="demo-strip">
         {% for card in demos %}
         <a href="{{ card.url }}" class="demo-mini">
-          <img src="{% static card.image %}" alt="" width="1000" height="700">
+          <img src="{% static card.image %}" alt="{{ card.title.text }}" data-i18n-alt="{{ card.title.key }}" width="1000" height="700" loading="lazy" decoding="async">
           <span class="demo-mini__body">
             <b data-i18n="{{ card.tag.key }}">{{ card.tag.text }}</b>
             <span data-i18n="{{ card.title.key }}">{{ card.title.text }}</span>

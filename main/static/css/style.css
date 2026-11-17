@@ -984,6 +984,15 @@ h3 {
   margin-top: 30px;
 }
 
+/* links from a case to the services it illustrates */
+.case__services {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  margin-top: 30px;
+}
+
 .case__section {
   padding-top: 60px;
 }
@@ -1302,7 +1311,7 @@ h3 {
   padding: 30px;
 }
 
-.demo h3 {
+.demo h2 {
   font-size: 28px;
   line-height: 34px;
 }
@@ -2429,7 +2438,7 @@ h3 {
     padding: 17px;
   }
 
-  .demo h3 {
+  .demo h2 {
     font-size: 22px;
     line-height: 28px;
   }

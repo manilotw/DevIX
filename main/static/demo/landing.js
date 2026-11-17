@@ -1,6 +1,7 @@
 // Демо «Лендинг»: меню на телефоне и форма заявки.
 // Бэкенда нет: заявка никуда не отправляется, после проверки полей показывается сообщение.
 (function () {
+  const t = window.demoText; // перевод строки на язык страницы (см. templates/demo/_bar.html)
   const burger = document.getElementById('burger');
   const nav = document.getElementById('nav');
 
@@ -36,9 +37,11 @@
     }
 
     const data = new FormData(form);
-    summary.textContent =
-      `${data.get('name').trim()}, мы получили заявку на маршрут ` +
-      `${data.get('from').trim()} → ${data.get('to').trim()}. Менеджер позвонит в течение часа.`;
+    summary.textContent = t('{name}, мы получили заявку на маршрут {from} → {to}. Менеджер позвонит в течение часа.', {
+      name: data.get('name').trim(),
+      from: data.get('from').trim(),
+      to: data.get('to').trim(),
+    });
     fields.hidden = true;
     done.hidden = false;
   });

@@ -7,7 +7,7 @@
     <a href="{{ card.url }}" class="btn btn--outline" data-i18n="portfolio_view">Подробнее</a>
   </div>
   {% if card.image %}
-  <img class="project__image" src="{% static card.image %}" alt="{{ card.title.text }}" loading="lazy">
+  <img class="project__image" src="{% static card.image %}" alt="{{ card.title.text }}" data-i18n-alt="{{ card.title.key }}" loading="lazy">
   {% else %}
   {% include 'partials/cover.html' with key=card.title.key text=card.title.text extra='project__image' %}
   {% endif %}

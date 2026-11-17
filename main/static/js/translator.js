@@ -18,7 +18,7 @@ function getCurrentLang() {
   return 'ru';
 }
 
-const TRANSLATIONS_VERSION = '20261117g';
+const TRANSLATIONS_VERSION = '20261117h';
 let currentLang = getCurrentLang();
 let translations = {};
 
@@ -125,6 +125,14 @@ function applyTranslations() {
     const key = element.getAttribute('data-i18n-label');
     if (t[key]) {
       element.setAttribute('data-label', t[key]);
+    }
+  });
+
+  // Переводим подписи картинок
+  document.querySelectorAll('[data-i18n-alt]').forEach(element => {
+    const key = element.getAttribute('data-i18n-alt');
+    if (t[key]) {
+      element.alt = t[key];
     }
   });
 }

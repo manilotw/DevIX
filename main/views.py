@@ -1,31 +1,48 @@
-from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactForm
-from .cases import CASES, case_cards, case_context
+from .cases import CASES, _translator, case_cards, case_context
 from .services import SERVICES, FAQ, service_context
 from .demos import DEMOS, demo_cards
 from .seo import localized_path, render_page, robots_txt, sitemap_xml, split_lang
 from . import bot
+from .demo_i18n import translate as translate_demo
 import json
 
 HOME_FAQ = [(f'faq{i}_question', f'faq{i}_answer') for i in range(1, 6)]
 
 
+# услуги в том же порядке, что на главной: (ключ названия, адрес)
+SERVICE_CATALOG = [
+    ('svc1_title', '/services/landing/'), ('svc3_title', '/services/online-store/'),
+    ('svc2_title', '/services/corporate/'), ('svc5_title', '/telegram-bots/'),
+    ('svc7_title', '/services/ai-agents/'), ('svc4_title', '/services/web-apps/'),
+    ('svc6_title', '/services/automation/'), ('svc8_title', '/services/diploma/'),
+]
+
+
+def card_items(cards):
+    """Карточки кейсов или демо как список для микроразметки."""
+    return [(card['title']['key'], card['url']) for card in cards]
+
+
 def index(request):
+    lang, _ = split_lang(request.path)
     return render_page(
-        request, 'index.html', {'cases': case_cards(limit=3), 'demos': demo_cards()},
-        title='page_title_index', description='meta_desc_index', faq=HOME_FAQ,
+        request, 'index.html', {'cases': case_cards(limit=3), 'demos': demo_cards(lang)},
+        title='page_title_index', description='meta_desc_index', faq=HOME_FAQ, catalog=SERVICE_CATALOG,
     )
 
 def portfolio(request):
+    cards = case_cards()
     return render_page(
-        request, 'portfolio.html', {'cases': case_cards()},
+        request, 'portfolio.html', {'cases': cards},
         title='page_title_portfolio', description='meta_desc_portfolio',
-        crumbs=[('nav_portfolio', '/portfolio/')],
+        crumbs=[('nav_portfolio', '/portfolio/')], items=card_items(cards), page_type='CollectionPage',
     )
 
 def calculator(request):
@@ -39,7 +56,7 @@ def aboutus(request):
     return render_page(
         request, 'aboutus.html',
         title='page_title_aboutus', description='meta_desc_aboutus',
-        crumbs=[('nav_about', '/aboutus/')],
+        crumbs=[('nav_about', '/aboutus/')], page_type='AboutPage',
     )
 
 def telegram_bots(request):
@@ -54,18 +71,25 @@ def contacts(request):
     return render_page(
         request, 'contacts.html',
         title='page_title_contacts', description='meta_desc_contacts',
-        crumbs=[('nav_contacts', '/contacts/')],
+        crumbs=[('nav_contacts', '/contacts/')], page_type='ContactPage',
     )
 
 def case(request, slug):
     context = case_context(slug)
     if context is None:
         raise Http404
+    # услуги, в примерах которых показан этот кейс: ссылки на них со страницы кейса
+    t = _translator()
+    context['services'] = [
+        {'url': f'/services/{service_slug}/', 'title': t(f"sp_{config['key']}_h1")}
+        for service_slug, config in SERVICES.items() if slug in config['projects']
+    ]
     return render_page(
         request, 'case.html', context,
         title=context['page_title']['key'], description=context['desc']['key'],
         image=context['image'],
         crumbs=[('nav_portfolio', '/portfolio/'), (context['title']['key'], f'/portfolio/{slug}/')],
+        work=(context['title']['key'], context['desc']['key']),
     )
 
 def service(request, slug):
@@ -82,21 +106,27 @@ def service(request, slug):
     )
 
 def demo(request):
+    lang, _ = split_lang(request.path)
+    cards = demo_cards(lang)
     return render_page(
-        request, 'demo.html', {'demos': demo_cards()},
+        request, 'demo.html', {'demos': cards},
         title='page_title_demo', description='meta_desc_demo',
-        crumbs=[('nav_demo', '/demo/')],
+        crumbs=[('nav_demo', '/demo/')], items=card_items(cards), page_type='CollectionPage',
     )
 
 def demo_project(request, slug):
-    """Отдельное демо: самостоятельная страница со своим дизайном, только на русском."""
+    """Отдельное демо: самостоятельная страница со своим дизайном.
+
+    Шаблоны написаны по-русски, для /en/... страница переводится по словарю.
+    """
     if slug not in DEMOS:
         raise Http404
     lang, _ = split_lang(request.path)
-    return render(request, f'demo/{slug}.html', {
+    page = render_to_string(f'demo/{slug}.html', {
         'back_url': localized_path(lang, '/demo/'),
         'contact_url': localized_path(lang, '/contacts/'),
-    })
+    }, request)
+    return HttpResponse(translate_demo(page, slug) if lang == 'en' else page)
 
 def page_not_found(request, exception=None):
     return render_page(

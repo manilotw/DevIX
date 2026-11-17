@@ -9,6 +9,7 @@
 import html
 import json
 import re
+from datetime import datetime, timezone
 from pathlib import Path
 from xml.sax.saxutils import escape as xml_escape
 
@@ -23,6 +24,7 @@ DEFAULT_LANG = 'ru'
 LANGS = ('ru', 'en')
 OG_LOCALES = {'ru': 'ru_RU', 'en': 'en_US'}
 OG_IMAGES = {'ru': 'img/og-ru.png', 'en': 'img/og-en.png'}
+OG_IMAGE_SIZE = (1200, 630)
 
 PHONE = '+77776183053'
 EMAIL = 'manilotcollab@gmail.com'
@@ -79,6 +81,8 @@ def _organization():
         'email': EMAIL,
         'telephone': PHONE,
         'sameAs': SOCIAL,
+        'areaServed': 'Worldwide',
+        'knowsLanguage': ['ru', 'en'],
         'contactPoint': {
             '@type': 'ContactPoint',
             'telephone': PHONE,
@@ -150,6 +154,8 @@ def _json_ld(nodes):
 # <тег ... data-i18n="ключ" ...>текст</тег> - как в браузере: текст элемента целиком
 _I18N_TEXT = re.compile(r'(<([a-zA-Z0-9]+)\b[^<>]*\sdata-i18n="([^"]+)"[^<>]*>)([^<]*)(?=</\2>)')
 _I18N_LABEL = re.compile(r'<[^<>]*\sdata-i18n-label="([^"]+)"[^<>]*>')
+_I18N_ALT = re.compile(r'<[^<>]*\sdata-i18n-alt="([^"]+)"[^<>]*>')
+_ALT = re.compile(r'(\salt=")[^"]*(")')
 _DATA_LABEL = re.compile(r'(\sdata-label=")[^"]*(")')
 # внутренние ссылки без языка; статика, админка и API остаются как есть
 _INTERNAL_HREF = re.compile(r'href="/(?!/|(?:en|ru|static|admin|api)(?:/|"))')
@@ -171,8 +177,15 @@ def localize(page, lang):
             return match.group(0)
         return _DATA_LABEL.sub(lambda m: m.group(1) + html.escape(value) + m.group(2), match.group(0))
 
+    def alt(match):
+        value = t.get(match.group(1))
+        if not value:
+            return match.group(0)
+        return _ALT.sub(lambda m: m.group(1) + html.escape(value) + m.group(2), match.group(0))
+
     page = _I18N_TEXT.sub(text, page)
     page = _I18N_LABEL.sub(label, page)
+    page = _I18N_ALT.sub(alt, page)
     if lang != DEFAULT_LANG:
         page = _INTERNAL_HREF.sub(f'href="/{lang}/', page)
     return page
@@ -181,24 +194,83 @@ def localize(page, lang):
 # ---------- страница ----------
 
 def render_page(request, template, context=None, *, title, description, image=None,
-                crumbs=None, faq=None, service=None, noindex=False, status=200):
-    """Отдаёт страницу на языке адреса вместе с мета-тегами.
+                crumbs=None, faq=None, service=None, catalog=None, items=None, work=None,
+                page_type='WebPage', noindex=False, status=200):
+    """Отдаёт страницу на языке адреса вместе с мета-тегами и микроразметкой.
 
     title, description - ключи переводов заголовка и описания страницы
     image       - картинка для соцсетей (путь в static), по умолчанию общая обложка
     crumbs      - хлебные крошки после «Главной»: [(ключ названия, адрес без языка)]
     faq         - вопросы и ответы страницы: [(ключ вопроса, ключ ответа)]
     service     - услуга на странице: (ключи названия, ключ описания)
+    catalog     - список услуг компании: [(ключ названия, адрес без языка)]
+    items       - список на странице (кейсы, демо): [(ключ названия, адрес без языка)]
+    work        - выполненная работа на странице (кейс): (ключ названия, ключ описания)
+    page_type   - тип страницы в schema.org: WebPage, AboutPage, ContactPage, CollectionPage
     """
     lang, path = split_lang(request.path)
     t = texts(lang)
     canonical = absolute(localized_path(lang, path))
+    picture = absolute(static(image or OG_IMAGES[lang]))
+    organization_id = {'@id': absolute('/#organization')}
 
-    nodes = [_organization(), _website(lang)]
+    organization = _organization()
+    organization['description'] = t.get('meta_desc_index', '')
+    if catalog:
+        organization['hasOfferCatalog'] = {
+            '@type': 'OfferCatalog',
+            'name': t.get('services_title', ''),
+            'itemListElement': [
+                {
+                    '@type': 'Offer',
+                    'itemOffered': {
+                        '@type': 'Service',
+                        'name': t.get(key, ''),
+                        'url': absolute(localized_path(lang, item_path)),
+                    },
+                }
+                for key, item_path in catalog
+            ],
+        }
+
+    nodes = [organization, _website(lang), {
+        '@type': page_type,
+        '@id': canonical + '#webpage',
+        'url': canonical,
+        'name': t.get(title) or 'DevIX',
+        'description': t.get(description, ''),
+        'inLanguage': lang,
+        'isPartOf': {'@id': absolute('/#website')},
+        'about': organization_id,
+        'primaryImageOfPage': picture,
+    }]
     if crumbs:
         nodes.append(_breadcrumbs(lang, t, crumbs))
     if service:
         nodes.append(_service(t, service[0], service[1], canonical))
+    if items:
+        nodes.append({
+            '@type': 'ItemList',
+            'itemListElement': [
+                {
+                    '@type': 'ListItem',
+                    'position': i,
+                    'name': t.get(key, ''),
+                    'url': absolute(localized_path(lang, item_path)),
+                }
+                for i, (key, item_path) in enumerate(items, 1)
+            ],
+        })
+    if work:
+        nodes.append({
+            '@type': 'CreativeWork',
+            'name': t.get(work[0], ''),
+            'description': t.get(work[1], ''),
+            'url': canonical,
+            'image': picture,
+            'inLanguage': lang,
+            'creator': organization_id,
+        })
     if faq:
         nodes.append(_faq(t, faq))
 
@@ -209,7 +281,8 @@ def render_page(request, template, context=None, *, title, description, image=No
         'description': t.get(description, ''),
         'canonical': canonical,
         'alternates': alternates(path),
-        'image': absolute(static(image or OG_IMAGES[lang])),
+        'image': picture,
+        'image_size': None if image else OG_IMAGE_SIZE,
         'locale': OG_LOCALES[lang],
         'other_locales': [OG_LOCALES[other] for other in LANGS if other != lang],
         'noindex': noindex,
@@ -224,10 +297,13 @@ def render_page(request, template, context=None, *, title, description, image=No
 # ---------- robots.txt и sitemap.xml ----------
 
 def robots_txt():
+    closed = ['Disallow: /admin/', 'Disallow: /api/']
     return '\n'.join([
-        'User-agent: *',
-        'Disallow: /admin/',
-        'Disallow: /api/',
+        'User-agent: *', *closed,
+        '',
+        # Яндекс: адреса с рекламными метками - та же страница, а не дубль
+        'User-agent: Yandex', *closed,
+        'Clean-param: utm_source&utm_medium&utm_campaign&utm_content&utm_term&yclid&gclid&fbclid',
         '',
         f"Sitemap: {absolute('/sitemap.xml')}",
         '',
@@ -241,6 +317,9 @@ def sitemap_xml(paths):
         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" '
         'xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     ]
+    # дата изменения - когда последний раз правили тексты сайта
+    changed = max((TEXTS_DIR / f'{lang}.json').stat().st_mtime for lang in LANGS)
+    lastmod = datetime.fromtimestamp(changed, timezone.utc).strftime('%Y-%m-%d')
     for path in paths:
         links = ''.join(
             f'<xhtml:link rel="alternate" hreflang="{link["lang"]}" href="{xml_escape(link["url"])}"/>'
@@ -248,6 +327,6 @@ def sitemap_xml(paths):
         )
         for lang in LANGS:
             loc = xml_escape(absolute(localized_path(lang, path)))
-            lines.append(f'<url><loc>{loc}</loc>{links}</url>')
+            lines.append(f'<url><loc>{loc}</loc><lastmod>{lastmod}</lastmod>{links}</url>')
     lines.append('</urlset>')
     return '\n'.join(lines) + '\n'

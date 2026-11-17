@@ -14,7 +14,7 @@
       <h1 data-i18n="{{ title.key }}">{{ title.text }}</h1>
 
       {% if image %}
-      <img class="case__image" src="{% static image %}" alt="{{ title.text }}"{% if image_size %} width="{{ image_size.0 }}" height="{{ image_size.1 }}"{% endif %} fetchpriority="high">
+      <img class="case__image" src="{% static image %}" alt="{{ title.text }}" data-i18n-alt="{{ title.key }}"{% if image_size %} width="{{ image_size.0 }}" height="{{ image_size.1 }}"{% endif %} fetchpriority="high">
       {% else %}
       {% include 'partials/cover.html' with key=title.key text=title.text extra='case__image' %}
       {% endif %}
@@ -43,6 +43,15 @@
               <p data-i18n="{{ format.key }}">{{ format.text }}</p>
             </div>
           </div>
+
+          {% if services %}
+          <div class="case__services">
+            <h3 data-i18n="case_services_title">Услуги по теме</h3>
+            {% for item in services %}
+            <a href="{{ item.url }}" class="link" data-i18n="{{ item.title.key }}">{{ item.title.text }}</a>
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
       </div>
 
