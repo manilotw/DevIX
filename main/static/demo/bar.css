@@ -1,0 +1,92 @@
+/* Полоса DevIX над каждым демо. Высота лежит в --bar-h: демо с экраном во всю
+   высоту (CRM, AI-агент) вычитают её из 100vh. */
+:root {
+  --bar-h: 44px;
+}
+
+.dx-bar {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  height: var(--bar-h);
+  padding: 0 20px;
+  background: #000;
+  color: #fff;
+  font: 500 14px/1 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+.dx-bar a {
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.dx-bar__back {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  margin-left: -8px;
+  border-radius: 50%;
+  transition: background .2s ease;
+}
+
+.dx-bar__back:hover {
+  background: rgba(255, 255, 255, .14);
+}
+
+.dx-bar__back svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.dx-bar__note {
+  overflow: hidden;
+  color: #b9b4c7;
+  font-weight: 400;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dx-bar__note b {
+  color: #fff;
+  font-weight: 600;
+}
+
+.dx-bar__cta {
+  padding: 8px 14px;
+  background: #7c3aed;
+  border-radius: 4px;
+  transition: background .2s ease;
+}
+
+.dx-bar__cta:hover {
+  background: #6d28d9;
+}
+
+@media (max-width: 767px) {
+  .dx-bar {
+    padding: 0 12px;
+    font-size: 13px;
+  }
+
+  .dx-bar__note span {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .dx-bar__note {
+    display: none;
+  }
+}

@@ -37,6 +37,10 @@ SITE_URL = env.str("SITE_URL", default="https://devix.kz")
 GOOGLE_SITE_VERIFICATION = env.str("GOOGLE_SITE_VERIFICATION", default="")
 YANDEX_VERIFICATION = env.str("YANDEX_VERIFICATION", default="")
 
+# Демо-бот записи клиентов в Telegram: токен от @BotFather и имя бота для ссылки t.me
+DEMO_BOT_TOKEN = env.str("DEMO_BOT_TOKEN", default="")
+DEMO_BOT_USERNAME = env.str("DEMO_BOT_USERNAME", default="")
+
 
 # Application definition
 

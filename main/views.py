@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
@@ -6,7 +7,9 @@ from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactForm
 from .cases import CASES, case_cards, case_context
 from .services import SERVICES, FAQ, service_context
-from .seo import render_page, robots_txt, sitemap_xml
+from .demos import DEMOS, demo_cards
+from .seo import localized_path, render_page, robots_txt, sitemap_xml, split_lang
+from . import bot
 import json
 
 HOME_FAQ = [(f'faq{i}_question', f'faq{i}_answer') for i in range(1, 6)]
@@ -14,7 +17,7 @@ HOME_FAQ = [(f'faq{i}_question', f'faq{i}_answer') for i in range(1, 6)]
 
 def index(request):
     return render_page(
-        request, 'index.html', {'cases': case_cards(limit=3)},
+        request, 'index.html', {'cases': case_cards(limit=3), 'demos': demo_cards()},
         title='page_title_index', description='meta_desc_index', faq=HOME_FAQ,
     )
 
@@ -78,6 +81,23 @@ def service(request, slug):
         faq=[(f'{p}_faq{i}_q', f'{p}_faq{i}_a') for i in range(1, FAQ + 1)],
     )
 
+def demo(request):
+    return render_page(
+        request, 'demo.html', {'demos': demo_cards()},
+        title='page_title_demo', description='meta_desc_demo',
+        crumbs=[('nav_demo', '/demo/')],
+    )
+
+def demo_project(request, slug):
+    """Отдельное демо: самостоятельная страница со своим дизайном, только на русском."""
+    if slug not in DEMOS:
+        raise Http404
+    lang, _ = split_lang(request.path)
+    return render(request, f'demo/{slug}.html', {
+        'back_url': localized_path(lang, '/demo/'),
+        'contact_url': localized_path(lang, '/contacts/'),
+    })
+
 def page_not_found(request, exception=None):
     return render_page(
         request, '404.html',
@@ -104,10 +124,25 @@ def robots(request):
     return HttpResponse(robots_txt(), content_type='text/plain; charset=utf-8')
 
 def sitemap(request):
-    paths = ['/', '/portfolio/', '/calculator/', '/aboutus/', '/telegram-bots/', '/contacts/']
+    paths = ['/', '/portfolio/', '/demo/', '/calculator/', '/aboutus/', '/telegram-bots/', '/contacts/']
     paths += [f'/services/{slug}/' for slug in SERVICES]
     paths += [f'/portfolio/{slug}/' for slug in CASES]
     return HttpResponse(sitemap_xml(paths), content_type='application/xml; charset=utf-8')
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def telegram_demo_bot(request):
+    """Вебхук демо-бота записи: Telegram присылает сюда сообщения и нажатия кнопок."""
+    secret = request.headers.get('X-Telegram-Bot-Api-Secret-Token', '')
+    if not settings.DEMO_BOT_TOKEN or secret != bot.webhook_secret():
+        return HttpResponse(status=403)
+    try:
+        bot.handle_update(json.loads(request.body))
+    except Exception:
+        # Telegram повторяет запрос, пока не получит 200: на ошибке в одном
+        # сообщении бот не должен застревать
+        bot.log.exception('demo bot: update failed')
+    return HttpResponse('ok')
 
 @csrf_exempt
 @require_http_methods(["POST"])

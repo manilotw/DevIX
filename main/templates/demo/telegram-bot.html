@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Бот записи клиентов — демо Telegram-бота | DevIX</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+  <link rel="stylesheet" href="{% static 'demo/bar.css' %}?v=9">
+  <link rel="stylesheet" href="{% static 'demo/telegram-bot.css' %}?v=3">
+</head>
+
+<body>
+  {% include 'demo/_bar.html' %}
+
+  <!-- Иконки -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="t-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></symbol>
+    <symbol id="t-send" viewBox="0 0 24 24"><path d="M3.4 20.4 21 12 3.4 3.600l.1 6.500L15 12 3.5 13.900z" fill="currentColor"/></symbol>
+    <symbol id="t-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+    <symbol id="t-dots" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></symbol>
+    <symbol id="t-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7h8v8M17 7 7 17"/></symbol>
+  </svg>
+
+  <div class="app">
+    <!-- список чатов: только на широком экране, для вида -->
+    <aside class="side" aria-hidden="true">
+      <div class="side__search"><svg><use href="#t-search"/></svg>Поиск</div>
+      <div class="dialog is-active">
+        <span class="ava ava--bot">✂️</span>
+        <div><b>Запись клиентов</b><span id="sideLast">Нажмите «Запустить»</span></div>
+      </div>
+      <div class="dialog">
+        <span class="ava" style="background:#7c3aed">D</span>
+        <div><b>DevIX</b><span>Здравствуйте! Чем можем помочь?</span></div>
+      </div>
+      <div class="dialog">
+        <span class="ava" style="background:#e17076">А</span>
+        <div><b>Айдана, мастер</b><span>Жду вас завтра в 13:00 🙂</span></div>
+      </div>
+      <div class="dialog">
+        <span class="ava" style="background:#6ec9cb">Н</span>
+        <div><b>Напоминания</b><span>Запись через 2 часа</span></div>
+      </div>
+    </aside>
+
+    <section class="chat">
+      <header class="chat__head">
+        <span class="ava ava--bot">✂️</span>
+        <div><b>Запись клиентов</b><span id="status">бот</span></div>
+        <svg class="chat__dots"><use href="#t-dots"/></svg>
+      </header>
+
+      <div class="feed" id="feed">
+        <div class="about" id="about">
+          <b>Что умеет этот бот?</b>
+          Записывает клиентов без звонков: услуга, мастер, день и время — за минуту. Это демо: запись никуда не сохраняется.
+        </div>
+        <div class="msgs" id="msgs" aria-live="polite"></div>
+      </div>
+
+      <!-- до запуска бота вместо поля ввода кнопка, как в Telegram -->
+      <button type="button" class="start" id="start">Запустить</button>
+
+      <form class="composer" id="composer" hidden>
+        <button type="button" class="composer__menu" id="menuBtn" aria-label="Меню"><svg><use href="#t-menu"/></svg>Меню</button>
+        <input type="text" id="input" placeholder="Сообщение" autocomplete="off" aria-label="Сообщение">
+        <button type="submit" class="composer__send" aria-label="Отправить"><svg><use href="#t-send"/></svg></button>
+      </form>
+    </section>
+  </div>
+
+  <script src="{% static 'demo/telegram-bot.js' %}?v=1"></script>
+</body>
+
+</html>

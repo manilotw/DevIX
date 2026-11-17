@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopAI — демо AI-агента | DevIX</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'demo/bar.css' %}?v=9">
+  <link rel="stylesheet" href="{% static 'demo/ai-agent.css' %}?v=9">
+</head>
+
+<body>
+  {% include 'demo/_bar.html' %}
+
+  <!-- Иконки -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="a-logo" viewBox="0 0 40 40" fill="none" stroke="#6d4aff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14h24l-2 20a3 3 0 0 1-3 3H13a3 3 0 0 1-3-3z"/><path d="M14 14v-3a6 6 0 0 1 12 0v3"/><path d="M16 23c2 3 6 3 8 0"/></symbol>
+    <symbol id="a-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-7l-5 4v-4H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/><path d="M8 11h.01M12 11h.01M16 11h.01"/></symbol>
+    <symbol id="a-cart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2.5l2.2 11h10.6L20.5 7.5H6.5"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></symbol>
+    <symbol id="a-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 7v10l8 4 8-4V7z"/><path d="m4 7 8 4 8-4M12 11v10"/></symbol>
+    <symbol id="a-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c0-4 3-6 6.5-6s6.5 2 6.5 6M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.5c2 .8 3.5 2.5 3.5 5.5"/></symbol>
+    <symbol id="a-chart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20v-5M10 20V10M15 20v-8M20 20V5"/></symbol>
+    <symbol id="a-gear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.5M12 18.5V21M3 12h2.5M18.5 12H21M5.6 5.600l1.8 1.8M16.6 16.600l1.8 1.8M5.6 18.400l1.8-1.8M16.6 7.400l1.8-1.8"/></symbol>
+    <symbol id="a-bolt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 3 5 13h6l-1 8 8-10h-6z"/></symbol>
+    <symbol id="a-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/></symbol>
+    <symbol id="a-scale" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v16M6 20h12M5 7h14M5 7l-3 7a3.5 3.5 0 0 0 6 0zM19 7l-3 7a3.5 3.5 0 0 0 6 0z"/></symbol>
+    <symbol id="a-spark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M10 4l1.8 5.200L17 11l-5.2 1.800L10 18l-1.8-5.200L3 11l5.2-1.800zM18 15l.8 2.200L21 18l-2.2.8L18 21l-.8-2.200L15 18l2.2-.8z"/></symbol>
+    <symbol id="a-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="a-mic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.500V21"/></symbol>
+    <symbol id="a-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12 4 4l3 8-3 8z"/><path d="M7 12h6"/></symbol>
+    <symbol id="a-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M6 13l6 6 6-6"/></symbol>
+    <symbol id="a-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="a-add" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v8M8 12h8"/></symbol>
+    <symbol id="a-ask" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.300c-.7.4-1 .9-1 1.700M12 16.500h.01"/></symbol>
+    <symbol id="a-import" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.500M5 19h14"/></symbol>
+    <symbol id="a-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></symbol>
+  </svg>
+
+  <!-- Дорожка прокрутки: пока посетитель листает страницу, окно чата стоит на месте,
+       а в нём по одному появляются сообщения -->
+  <div class="track" id="track">
+    <div class="app">
+      <aside class="side">
+        <div class="brand"><svg><use href="#a-logo"/></svg><span>ShopAI</span><i>AI</i></div>
+        <nav class="menu">
+          <span class="is-active"><svg><use href="#a-chat"/></svg>Чат с ассистентом</span>
+          <span><svg><use href="#a-cart"/></svg>Заказы</span>
+          <span><svg><use href="#a-box"/></svg>Товары</span>
+          <span><svg><use href="#a-users"/></svg>Клиенты</span>
+          <span><svg><use href="#a-chart"/></svg>Аналитика</span>
+          <span><svg><use href="#a-gear"/></svg>Настройки</span>
+        </nav>
+        <div class="shop"><span class="shop__icon"><svg><use href="#a-box"/></svg></span><div><b>Мой магазин</b><span>Онлайн</span></div></div>
+      </aside>
+
+      <section class="chat">
+        <div class="feed" id="feed">
+          <div class="intro">
+            <img class="intro__robot" src="{% static 'img/demo/ai/robot.jpg' %}" alt="" width="200" height="200">
+            <div>
+              <h1>Привет! 👋</h1>
+              <h2>Я ваш AI-агент для магазина</h2>
+              <p>Помогаю с заказами, товарами, клиентами и другими задачами.</p>
+            </div>
+          </div>
+          <div class="chips" aria-hidden="true">
+            <span class="is-main"><svg><use href="#a-add"/></svg>Создать товар</span>
+            <span><svg><use href="#a-cart"/></svg>Оформить заказ</span>
+            <span><svg><use href="#a-chart"/></svg>Показать продажи</span>
+            <span><svg><use href="#a-ask"/></svg>Ответить на вопрос</span>
+          </div>
+          <div class="msgs" id="msgs" aria-live="polite"></div>
+        </div>
+
+        <div class="hint" id="hint">
+          <span class="hint__scroll"><svg id="hintArrow"><use href="#a-down"/></svg><span id="hintText">Листайте вниз<span class="hint__more">, чтобы увидеть пример диалога</span></span></span>
+          <span class="hint__count" id="hintCount">0 / 10</span>
+          <button type="button" id="showAll">Показать весь</button>
+          <button type="button" id="restart" hidden>Смотреть заново</button>
+        </div>
+
+        <div class="composer" aria-hidden="true">
+          <span class="composer__btn"><svg><use href="#a-plus"/></svg></span>
+          <span class="composer__text">Напишите задачу...</span>
+          <span class="composer__btn"><svg><use href="#a-mic"/></svg></span>
+          <span class="composer__send"><svg><use href="#a-send"/></svg></span>
+        </div>
+      </section>
+
+      <aside class="info">
+        <section class="box">
+          <h3><svg><use href="#a-bolt"/></svg>Возможности агента</h3>
+          <ul class="skills">
+            <li><svg><use href="#a-cart"/></svg>Работа с заказами<svg class="skills__go"><use href="#a-chev"/></svg></li>
+            <li><svg><use href="#a-box"/></svg>Управление товарами<svg class="skills__go"><use href="#a-chev"/></svg></li>
+            <li><svg><use href="#a-chat"/></svg>Ответы на вопросы клиентов<svg class="skills__go"><use href="#a-chev"/></svg></li>
+            <li><svg><use href="#a-import"/></svg>Импорт и обновление данных</li>
+            <li><svg><use href="#a-spark"/></svg>И многое другое</li>
+          </ul>
+        </section>
+
+        <section class="box">
+          <h3>Контекст магазина<span class="online">Подключён</span></h3>
+          <div class="fact"><span class="fact__icon"><svg><use href="#a-cart"/></svg></span><div><span>Заказы сегодня</span><b id="ordersToday">24</b></div><em id="ordersDelta">+20%</em></div>
+          <div class="fact"><span class="fact__icon"><svg><use href="#a-box"/></svg></span><div><span>Товары в каталоге</span><b>1 248</b></div></div>
+          <div class="fact"><span class="fact__icon"><svg><use href="#a-users"/></svg></span><div><span>Клиенты</span><b id="clientsTotal">842</b></div></div>
+        </section>
+      </aside>
+    </div>
+  </div>
+
+  <!-- После диалога -->
+  <section class="after">
+    <h2>Такой агент может работать в вашем магазине</h2>
+    <p>Подключим его к каталогу, остаткам и заказам: он будет отвечать покупателям на сайте и в мессенджерах и сам оформлять заказы.</p>
+    <a href="{{ contact_url }}" class="btn">Обсудить проект</a>
+  </section>
+
+  <script src="{% static 'demo/ai-agent.js' %}?v=9"></script>
+</body>
+
+</html>

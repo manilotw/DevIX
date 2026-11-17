@@ -1,0 +1,37 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block content %}
+  <!-- DEMO SECTION -->
+  <section class="section">
+    <div class="container">
+      <div class="heading heading--page">
+        <h1 data-i18n="demo_title">Демо-проекты</h1>
+        <p data-i18n="demo_subtitle">Откройте демо и попробуйте, как будет выглядеть и работать ваш проект. Данные в демо вымышленные и нигде не сохраняются.</p>
+      </div>
+
+      <div class="demos">
+        {% for card in demos %}
+        <article class="demo">
+          <a href="{{ card.url }}" class="demo__shot" tabindex="-1" aria-hidden="true">
+            <img src="{% static card.image %}" alt="" width="1000" height="700" loading="lazy">
+            <span class="demo__tag" data-i18n="{{ card.tag.key }}">{{ card.tag.text }}</span>
+          </a>
+          <div class="demo__body">
+            <h3 data-i18n="{{ card.title.key }}">{{ card.title.text }}</h3>
+            <p data-i18n="{{ card.desc.key }}">{{ card.desc.text }}</p>
+            <ul class="bullets">
+              {% for item in card.tries %}
+              <li data-i18n="{{ item.key }}">{{ item.text }}</li>
+              {% endfor %}
+            </ul>
+            <a href="{{ card.url }}" class="btn btn--outline" data-i18n="demo_open">Открыть демо</a>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      {% include 'partials/banner.html' %}
+    </div>
+  </section>
+{% endblock %}

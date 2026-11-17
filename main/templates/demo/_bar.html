@@ -1,0 +1,33 @@
+{% load static %}
+<!-- Полоса DevIX над демо: стрелка «назад» и переход к заявке -->
+<div class="dx-bar">
+  <a href="{{ back_url }}" class="dx-bar__back" aria-label="Назад"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></a>
+  <span class="dx-bar__note"><b>Демо DevIX.</b> <span>Данные вымышленные, ничего не сохраняется</span></span>
+  <a href="{{ contact_url }}" class="dx-bar__cta">Хочу такой проект</a>
+</div>
+<script>
+  (function () {
+    // Стрелка возвращает на страницу, с которой пришли. Если демо открыли по прямой
+    // ссылке, возвращаться некуда - тогда она ведёт к списку демо (адрес в href).
+    var cameFromSite = document.referrer.indexOf(location.origin) === 0;
+    document.querySelector('.dx-bar__back').addEventListener('click', function (event) {
+      if (cameFromSite && history.length > 1) {
+        event.preventDefault();
+        history.back();
+      }
+    });
+
+    // Ссылки-якоря внутри демо прокручивают страницу, но не добавляют шаги в историю
+    // браузера: иначе стрелка сначала ходила бы по этим якорям.
+    document.addEventListener('click', function (event) {
+      var link = event.target.closest('a[href^="#"]');
+      if (!link) return;
+      var id = link.getAttribute('href');
+      var target = id.length > 1 && document.querySelector(id);
+      if (!target) return;
+      event.preventDefault();
+      if (id === '#top') window.scrollTo(0, 0);
+      else target.scrollIntoView();
+    });
+  })();
+</script>

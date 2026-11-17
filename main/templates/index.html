@@ -1,4 +1,5 @@
 {% extends 'layout.html' %}
+{% load static %}
 
 {% block header %}{% include 'partials/header.html' with theme='dark' %}{% endblock %}
 
@@ -18,6 +19,31 @@
 
       <div class="hero__actions">
         <a href="#contact" class="btn btn--white btn--hero" data-i18n="header_cta">Обсудить проект</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO SECTION -->
+  <section class="section section--strip">
+    <div class="container">
+      <div class="heading heading--row heading--mini">
+        <h2 data-i18n="demo_title">Демо-проекты</h2>
+        <a href="/demo/" class="more-link">
+          <span data-i18n="demo_all">Все демо</span>
+          <svg class="icon"><use href="#i-chevron"/></svg>
+        </a>
+      </div>
+
+      <div class="demo-strip">
+        {% for card in demos %}
+        <a href="{{ card.url }}" class="demo-mini">
+          <img src="{% static card.image %}" alt="" width="1000" height="700">
+          <span class="demo-mini__body">
+            <b data-i18n="{{ card.tag.key }}">{{ card.tag.text }}</b>
+            <span data-i18n="{{ card.title.key }}">{{ card.title.text }}</span>
+          </span>
+        </a>
+        {% endfor %}
       </div>
     </div>
   </section>

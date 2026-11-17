@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cargoway — демо лендинга | DevIX</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'demo/bar.css' %}?v=9">
+  <link rel="stylesheet" href="{% static 'demo/landing.css' %}?v=9">
+</head>
+
+<body>
+  {% include 'demo/_bar.html' %}
+
+  <!-- Иконки -->
+  <svg class="sprite" aria-hidden="true">
+    <symbol id="l-logo" viewBox="0 0 44 44" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M22 4 38 13v18L22 40 6 31V13z"/><path d="M6 13l16 9 16-9M22 22v18"/><path d="M30 19v7l-4-2"/>
+    </symbol>
+    <symbol id="l-truck" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M2 6h11v10H2zM13 9h4l4 4v3h-8z"/><circle cx="6.5" cy="17.5" r="2"/><circle cx="17" cy="17.5" r="2"/>
+    </symbol>
+    <symbol id="l-plane" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M21 3 3 10l6 3 3 6z"/><path d="m9 13 5-4"/>
+    </symbol>
+    <symbol id="l-ship" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M4 13l8-3 8 3-2 6H6z"/><path d="M7 11V6h10v5M12 3v3M2 21c2 0 2-1 4-1s2 1 4 1 2-1 4-1 2 1 4 1 2-1 4-1"/>
+    </symbol>
+    <symbol id="l-warehouse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M3 21V9l9-5 9 5v12"/><path d="M7 21v-8h10v8M7 17h10"/>
+    </symbol>
+    <symbol id="l-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/><path d="m9 12 2 2 4-4"/>
+    </symbol>
+    <symbol id="l-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M4 14v-2a8 8 0 0 1 16 0v2"/><path d="M4 13h3v5H5a1 1 0 0 1-1-1zM20 13h-3v5h2a1 1 0 0 0 1-1zM19 18c0 2-2 3-5 3"/>
+    </symbol>
+    <symbol id="l-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round">
+      <path d="m5 12 5 5 9-10"/>
+    </symbol>
+    <symbol id="l-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+      <path d="M5 12h14M13 6l6 6-6 6"/>
+    </symbol>
+  </svg>
+
+  <!-- HEADER -->
+  <header class="header" id="top">
+    <div class="wrap header__inner">
+      <a href="#top" class="logo">
+        <svg><use href="#l-logo"/></svg>
+        <span>Cargoway</span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <a href="#services">Услуги</a>
+        <a href="#why">Преимущества</a>
+        <a href="#about">О нас</a>
+        <a href="#contacts">Контакты</a>
+      </nav>
+
+      <a href="#request" class="btn btn--primary header__cta">Оставить заявку</a>
+      <button type="button" class="burger" id="burger" aria-label="Меню" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </header>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero__inner">
+        <div class="hero__text">
+          <h1>Надёжная логистика для вашего бизнеса</h1>
+          <p>Международные и внутренние грузоперевозки, таможенное оформление и складские решения</p>
+
+          <div class="hero__actions">
+            <a href="#request" class="btn btn--primary btn--lg">Рассчитать доставку <svg><use href="#l-arrow"/></svg></a>
+            <a href="#services" class="btn btn--ghost btn--lg">Наши услуги</a>
+          </div>
+
+          <ul class="hero__perks">
+            <li><svg><use href="#l-truck"/></svg>Быстрая доставка</li>
+            <li><svg><use href="#l-shield"/></svg>Сохранность груза</li>
+            <li><svg><use href="#l-headset"/></svg>Поддержка 24/7</li>
+          </ul>
+        </div>
+      </div>
+
+      <img class="hero__art" src="{% static 'img/demo/landing/hero.jpg' %}" alt="Фура с контейнером на фоне порта" width="846" height="472">
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services">
+      <div class="wrap">
+        <h2 class="title">Наши услуги</h2>
+
+        <div class="services">
+          <article class="card">
+            <svg><use href="#l-truck"/></svg>
+            <h3>Автоперевозки</h3>
+            <p>Доставка по Казахстану и СНГ</p>
+          </article>
+          <article class="card">
+            <svg><use href="#l-plane"/></svg>
+            <h3>Авиаперевозки</h3>
+            <p>Быстрая доставка международных грузов</p>
+          </article>
+          <article class="card">
+            <svg><use href="#l-ship"/></svg>
+            <h3>Морские перевозки</h3>
+            <p>Выгодные решения для крупных грузов</p>
+          </article>
+          <article class="card">
+            <svg><use href="#l-warehouse"/></svg>
+            <h3>Складские услуги</h3>
+            <p>Хранение, обработка и комплектация</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="section section--tight" id="why">
+      <div class="wrap why">
+        <img class="why__art" src="{% static 'img/demo/landing/why.jpg' %}" alt="Контейнеры и портовый кран" width="630" height="118" loading="lazy">
+
+        <div class="why__text">
+          <h2 class="title title--left">Почему выбирают нас</h2>
+          <ul class="checks">
+            <li><svg><use href="#l-check"/></svg>Полный цикл логистики</li>
+            <li><svg><use href="#l-check"/></svg>Прозрачные сроки и стоимость</li>
+            <li><svg><use href="#l-check"/></svg>Опытная команда</li>
+            <li><svg><use href="#l-check"/></svg>Страхование каждого груза</li>
+            <li><svg><use href="#l-check"/></svg>Отслеживание в личном кабинете</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section" id="about">
+      <div class="wrap">
+        <h2 class="title">О компании</h2>
+        <p class="lead">Cargoway возит грузы с 2012 года. Берём на себя маршрут, документы и таможню — вы получаете груз в срок и знаете, где он находится в каждый момент.</p>
+
+        <div class="stats">
+          <div><b>14 лет</b><span>на рынке логистики</span></div>
+          <div><b>40+</b><span>стран доставки</span></div>
+          <div><b>15 000</b><span>грузов в год</span></div>
+          <div><b>98%</b><span>доставок точно в срок</span></div>
+        </div>
+
+        <ol class="steps">
+          <li><b>Заявка</b><span>Вы описываете груз и маршрут</span></li>
+          <li><b>Расчёт</b><span>Считаем стоимость и сроки за час</span></li>
+          <li><b>Перевозка</b><span>Забираем груз и оформляем документы</span></li>
+          <li><b>Получение</b><span>Доставляем до двери или склада</span></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- REQUEST FORM -->
+    <section class="section section--blue" id="request">
+      <div class="wrap request">
+        <div class="request__text">
+          <h2 class="title title--left">Рассчитаем доставку за час</h2>
+          <p>Оставьте заявку — менеджер подберёт маршрут и назовёт стоимость.</p>
+          <ul class="checks checks--light">
+            <li><svg><use href="#l-check"/></svg>Бесплатный расчёт</li>
+            <li><svg><use href="#l-check"/></svg>Ответ в течение часа</li>
+            <li><svg><use href="#l-check"/></svg>Без скрытых платежей</li>
+          </ul>
+        </div>
+
+        <form class="form" id="form" novalidate>
+          <div class="form__fields" id="formFields">
+            <label>Имя
+              <input type="text" name="name" placeholder="Как к вам обращаться" required>
+            </label>
+            <label>Телефон
+              <input type="tel" name="phone" placeholder="+7 700 000 00 00" required>
+            </label>
+            <div class="form__row">
+              <label>Откуда
+                <input type="text" name="from" placeholder="Алматы" required>
+              </label>
+              <label>Куда
+                <input type="text" name="to" placeholder="Москва" required>
+              </label>
+            </div>
+            <div class="form__row">
+              <label>Тип перевозки
+                <select name="type">
+                  <option>Автоперевозка</option>
+                  <option>Авиаперевозка</option>
+                  <option>Морская перевозка</option>
+                  <option>Нужен склад</option>
+                </select>
+              </label>
+              <label>Вес груза, кг
+                <input type="number" name="weight" min="1" placeholder="500">
+              </label>
+            </div>
+            <button type="submit" class="btn btn--primary btn--lg btn--block">Отправить заявку</button>
+            <p class="form__note">Это демо: заявка никуда не отправляется.</p>
+          </div>
+
+          <div class="form__done" id="formDone" hidden>
+            <span class="form__ok"><svg><use href="#l-check"/></svg></span>
+            <h3>Заявка отправлена</h3>
+            <p id="formSummary"></p>
+            <button type="button" class="btn btn--ghost" id="formAgain">Отправить ещё одну</button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" id="contacts">
+    <div class="wrap footer__inner">
+      <div>
+        <a href="#top" class="logo logo--light">
+          <svg><use href="#l-logo"/></svg>
+          <span>Cargoway</span>
+        </a>
+        <p>Международные и внутренние грузоперевозки</p>
+      </div>
+      <div>
+        <b>Контакты</b>
+        <span>+7 700 000 00 00</span>
+        <span>hello@cargoway.example</span>
+        <span>Алматы, пр. Примерный, 1</span>
+      </div>
+      <div>
+        <b>Режим работы</b>
+        <span>Пн–Пт: 9:00–19:00</span>
+        <span>Поддержка: круглосуточно</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="{% static 'demo/landing.js' %}?v=9"></script>
+</body>
+
+</html>

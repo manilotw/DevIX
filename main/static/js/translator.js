@@ -18,7 +18,7 @@ function getCurrentLang() {
   return 'ru';
 }
 
-const TRANSLATIONS_VERSION = '20261117a';
+const TRANSLATIONS_VERSION = '20261117g';
 let currentLang = getCurrentLang();
 let translations = {};
 

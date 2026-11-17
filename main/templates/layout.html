@@ -45,7 +45,7 @@
   <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261117a">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261117g">
 
   <!-- Language -->
   <script>
@@ -68,7 +68,7 @@
 
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/static/js/${lang}.json?v=20261117a`, false);
+        xhr.open('GET', `/static/js/${lang}.json?v=20261117g`, false);
         xhr.send();
 
         if (xhr.status === 200) {
@@ -118,7 +118,7 @@
   </script>
 
   <!-- Language Translator Script -->
-  <script src="{% static 'js/translator.js' %}?v=20261117a"></script>
+  <script src="{% static 'js/translator.js' %}?v=20261117g"></script>
   {% block extra_head %}{% endblock %}
 </head>
 
@@ -138,7 +138,7 @@
   {% include 'partials/footer.html' %}
 
   <!-- JavaScript -->
-  <script src="{% static 'js/script.js' %}?v=20261117a"></script>
+  <script src="{% static 'js/script.js' %}?v=20261117g"></script>
   {% block extra_js %}{% endblock %}
 </body>
 
