@@ -31,6 +31,12 @@ DEBUG = env.bool("DEBUG", default=True)
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
+# SEO: основной адрес сайта (canonical, hreflang, sitemap, превью в соцсетях)
+# и коды подтверждения из Google Search Console и Яндекс Вебмастера
+SITE_URL = env.str("SITE_URL", default="https://devix.kz")
+GOOGLE_SITE_VERIFICATION = env.str("GOOGLE_SITE_VERIFICATION", default="")
+YANDEX_VERIFICATION = env.str("YANDEX_VERIFICATION", default="")
+
 
 # Application definition
 

@@ -1,8 +1,11 @@
-from django.urls import path
-from .views import index, portfolio, calculator, aboutus, telegram_bots, contacts, service, case, send_contact_email
+from django.urls import path, re_path
+from .views import (
+    index, portfolio, calculator, aboutus, telegram_bots, contacts, service, case,
+    send_contact_email, ru_redirect, robots, sitemap,
+)
 
 urlpatterns = [
-    # Default routes (Russian)
+    # Russian routes (default language, no prefix)
     path('', index, name='index'),
     path('portfolio/', portfolio, name='portfolio'),
     path('portfolio/<slug:slug>/', case, name='case'),
@@ -11,17 +14,10 @@ urlpatterns = [
     path('telegram-bots/', telegram_bots, name='telegram_bots'),
     path('contacts/', contacts, name='contacts'),
     path('services/<slug:slug>/', service, name='service'),
-    
-    # Russian routes
-    path('ru/', index, name='index_ru'),
-    path('ru/portfolio/', portfolio, name='portfolio_ru'),
-    path('ru/portfolio/<slug:slug>/', case, name='case_ru'),
-    path('ru/calculator/', calculator, name='calculator_ru'),
-    path('ru/aboutus/', aboutus, name='aboutus_ru'),
-    path('ru/telegram-bots/', telegram_bots, name='telegram_bots_ru'),
-    path('ru/contacts/', contacts, name='contacts_ru'),
-    path('ru/services/<slug:slug>/', service, name='service_ru'),
-    
+
+    # Old /ru/... addresses: permanent redirect to the address without prefix
+    re_path(r'^ru(?:/(?P<rest>.*))?$', ru_redirect, name='ru_redirect'),
+
     # English routes
     path('en/', index, name='index_en'),
     path('en/portfolio/', portfolio, name='portfolio_en'),
@@ -31,7 +27,11 @@ urlpatterns = [
     path('en/telegram-bots/', telegram_bots, name='telegram_bots_en'),
     path('en/contacts/', contacts, name='contacts_en'),
     path('en/services/<slug:slug>/', service, name='service_en'),
-    
+
+    # Search engines
+    path('robots.txt', robots, name='robots'),
+    path('sitemap.xml', sitemap, name='sitemap'),
+
     # API
     path('api/send-contact/', send_contact_email, name='send_contact_email'),
 ]

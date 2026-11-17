@@ -940,6 +940,7 @@ h3 {
 
 .case__image {
   width: 100%;
+  height: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius);
 }

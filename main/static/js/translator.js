@@ -18,13 +18,17 @@ function getCurrentLang() {
   return 'ru';
 }
 
-const TRANSLATIONS_VERSION = '20261004n';
+const TRANSLATIONS_VERSION = '20261117a';
 let currentLang = getCurrentLang();
 let translations = {};
 
 // Загружаем переводы сразу при загрузке скрипта
 function initTranslator() {
-  loadTranslations(currentLang);
+  // Сервер уже отдал страницу на языке адреса: переводы нужны, только если
+  // посетитель раньше выбрал другой язык
+  if (window.pageLang !== currentLang) {
+    loadTranslations(currentLang);
+  }
   
   // Обновляем кнопки языков когда DOM готов
   window.addEventListener('DOMContentLoaded', function() {
@@ -58,51 +62,30 @@ function switchLanguage(lang) {
   
   // Получаем текущий путь без языкового префикса
   let currentPath = window.location.pathname;
-  currentPath = currentPath.replace(/^\/(ru|en)/, ''); // Убираем /ru или /en
+  currentPath = currentPath.replace(/^\/(ru|en)(?=\/|$)/, ''); // Убираем /ru или /en
   
   // Если путь пустой, ставим /
   if (!currentPath) {
     currentPath = '/';
   }
   
-  // Переходим на новый язык
-  if (lang === 'en') {
-    window.location.href = '/en' + currentPath;
-  } else if (lang === 'ru') {
-    window.location.href = '/ru' + currentPath;
-  }
+  // Переходим на новый язык: русская версия - без префикса, английская - /en
+  window.location.href = lang === 'en' ? '/en' + currentPath : currentPath;
 }
 
 function updateAllLinks() {
-  // Обновляем все внутренние ссылки, добавляя языковой префикс
+  // Внутренние ссылки ведут на страницы выбранного языка
   const links = document.querySelectorAll('a[href^="/"]');
   links.forEach(link => {
-    let href = link.getAttribute('href');
-    
-    // Пропускаем API ссылки
-    if (href.startsWith('/api/')) {
+    const href = link.getAttribute('href');
+
+    // Пропускаем API, статику и админку
+    if (/^\/(api|static|admin)(\/|$)/.test(href)) {
       return;
     }
-    
-    // Пропускаем ссылки которые уже имеют языковой префикс
-    if (href.startsWith('/ru/') || href.startsWith('/en/')) {
-      return;
-    }
-    
-    // Добавляем языковой префикс
-    if (currentLang === 'en') {
-      if (href === '/') {
-        link.setAttribute('href', '/en/');
-      } else {
-        link.setAttribute('href', '/en' + href);
-      }
-    } else if (currentLang === 'ru') {
-      if (href === '/') {
-        link.setAttribute('href', '/ru/');
-      } else {
-        link.setAttribute('href', '/ru' + href);
-      }
-    }
+
+    const path = href.replace(/^\/(ru|en)(?=\/|$)/, '') || '/';
+    link.setAttribute('href', currentLang === 'en' ? '/en' + path : path);
   });
 }
 

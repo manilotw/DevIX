@@ -15,6 +15,7 @@ RU_TEXTS = Path(__file__).resolve().parent / 'static' / 'js' / 'ru.json'
 #   about / done / result - сколько абзацев и пунктов списка в каждом разделе
 # Только для открытых кейсов:
 #   image    - скриншот (без него показывается чёрная обложка с названием кейса)
+#   image_size - его ширина и высота: браузер заранее отводит место под картинку
 #   client   - название клиента на странице кейса
 #   stack    - технологии
 # У кейса под NDA нет скриншота, названия клиента и стека; раздел называется
@@ -23,7 +24,8 @@ CASES = {
     'a1-cleaning': {
         'key': 'a1',
         'project': 4,
-        'image': 'img/sitepicture/a1cleaning.png',
+        'image': 'img/sitepicture/a1cleaning.jpg',
+        'image_size': (1902, 1079),
         'tag': 'A1 Cleaning',
         'client': 'A1 Cleaning Services',
         'stack': ['HTML', 'CSS', 'JavaScript', 'Python'],
@@ -56,7 +58,7 @@ def _card(slug, t):
     config = CASES[slug]
     n = config['project']
     return {
-        'url': f'/portfolio/{slug}',
+        'url': f'/portfolio/{slug}/',
         'tag': config.get('tag'),
         'title': t(f'portfolio_project{n}_title'),
         'desc': t(f'portfolio_project{n}_desc'),
@@ -89,6 +91,7 @@ def case_context(slug):
         'title': card['title'],
         'desc': card['desc'],
         'image': card['image'],
+        'image_size': config.get('image_size'),
         'client': NDA if nda else config.get('client'),
         'format': t(f'{p}_format'),
         'stack': [] if nda else config.get('stack', []),

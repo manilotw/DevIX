@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <!-- NOT FOUND SECTION -->
+  <section class="hero hero--light">
+    <div class="container hero__content">
+      <h1 data-i18n="nf_title">Страница не найдена</h1>
+
+      <p class="hero__subtitle" data-i18n="nf_text">Такой страницы нет: возможно, она была удалена или в адресе ошибка.</p>
+
+      <div class="hero__actions">
+        <a href="/" class="btn btn--accent btn--hero" data-i18n="nf_btn">На главную</a>
+      </div>
+    </div>
+  </section>
+{% endblock %}

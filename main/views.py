@@ -1,43 +1,113 @@
-from django.shortcuts import render
-from django.http import Http404, JsonResponse
+from django.http import Http404, HttpResponse, HttpResponsePermanentRedirect, JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.mail import send_mail
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .forms import ContactForm
-from .cases import case_cards, case_context
-from .services import service_context
+from .cases import CASES, case_cards, case_context
+from .services import SERVICES, FAQ, service_context
+from .seo import render_page, robots_txt, sitemap_xml
 import json
 
+HOME_FAQ = [(f'faq{i}_question', f'faq{i}_answer') for i in range(1, 6)]
+
+
 def index(request):
-    return render(request, 'index.html', {'cases': case_cards(limit=3)})
+    return render_page(
+        request, 'index.html', {'cases': case_cards(limit=3)},
+        title='page_title_index', description='meta_desc_index', faq=HOME_FAQ,
+    )
 
 def portfolio(request):
-    return render(request, 'portfolio.html', {'cases': case_cards()})
+    return render_page(
+        request, 'portfolio.html', {'cases': case_cards()},
+        title='page_title_portfolio', description='meta_desc_portfolio',
+        crumbs=[('nav_portfolio', '/portfolio/')],
+    )
 
 def calculator(request):
-    return render(request, 'calculator.html')
+    return render_page(
+        request, 'calculator.html',
+        title='page_title_calculator', description='meta_desc_calculator',
+        crumbs=[('nav_pricing', '/calculator/')],
+    )
 
 def aboutus(request):
-    return render(request, 'aboutus.html')
+    return render_page(
+        request, 'aboutus.html',
+        title='page_title_aboutus', description='meta_desc_aboutus',
+        crumbs=[('nav_about', '/aboutus/')],
+    )
 
 def telegram_bots(request):
-    return render(request, 'telegram-bots.html')
+    return render_page(
+        request, 'telegram-bots.html',
+        title='page_title_telegram', description='meta_desc_telegram',
+        crumbs=[('nav_telegram', '/telegram-bots/')],
+        service=(('tgbots_title1', 'tgbots_title2'), 'tgbots_subtitle'),
+    )
 
 def contacts(request):
-    return render(request, 'contacts.html')
+    return render_page(
+        request, 'contacts.html',
+        title='page_title_contacts', description='meta_desc_contacts',
+        crumbs=[('nav_contacts', '/contacts/')],
+    )
 
 def case(request, slug):
     context = case_context(slug)
     if context is None:
         raise Http404
-    return render(request, 'case.html', context)
+    return render_page(
+        request, 'case.html', context,
+        title=context['page_title']['key'], description=context['desc']['key'],
+        image=context['image'],
+        crumbs=[('nav_portfolio', '/portfolio/'), (context['title']['key'], f'/portfolio/{slug}/')],
+    )
 
 def service(request, slug):
     context = service_context(slug)
     if context is None:
         raise Http404
-    return render(request, 'service.html', context)
+    p = f"sp_{SERVICES[slug]['key']}"
+    return render_page(
+        request, 'service.html', context,
+        title=f'{p}_page_title', description=f'{p}_meta',
+        crumbs=[(f'{p}_h1', f'/services/{slug}/')],
+        service=((f'{p}_h1',), f'{p}_sub'),
+        faq=[(f'{p}_faq{i}_q', f'{p}_faq{i}_a') for i in range(1, FAQ + 1)],
+    )
+
+def page_not_found(request, exception=None):
+    return render_page(
+        request, '404.html',
+        title='page_title_404', description='nf_text', noindex=True, status=404,
+    )
+
+def ru_redirect(request, rest=''):
+    """Русская версия живёт без префикса: /ru/portfolio/ -> /portfolio/.
+
+    Для поисковиков редирект постоянный (301), но браузер помнит его только час:
+    без этого заголовка он запомнил бы редирект навсегда, и вернуть адреса /ru/
+    было бы нельзя.
+    """
+    url = '/' + (rest or '')
+    if not url.endswith('/'):
+        url += '/'
+    if request.META.get('QUERY_STRING'):
+        url += '?' + request.META['QUERY_STRING']
+    response = HttpResponsePermanentRedirect(url)
+    response['Cache-Control'] = 'max-age=3600'
+    return response
+
+def robots(request):
+    return HttpResponse(robots_txt(), content_type='text/plain; charset=utf-8')
+
+def sitemap(request):
+    paths = ['/', '/portfolio/', '/calculator/', '/aboutus/', '/telegram-bots/', '/contacts/']
+    paths += [f'/services/{slug}/' for slug in SERVICES]
+    paths += [f'/portfolio/{slug}/' for slug in CASES]
+    return HttpResponse(sitemap_xml(paths), content_type='application/xml; charset=utf-8')
 
 @csrf_exempt
 @require_http_methods(["POST"])

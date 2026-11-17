@@ -1,10 +1,6 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block title %}{{ page_title.text }}{% endblock %}
-{% block description %}{{ sub.text }}{% endblock %}
-{% block title_key %}{{ page_title.key }}{% endblock %}
-
 {% block content %}
   <!-- HERO SECTION -->
   <section class="hero hero--light">
@@ -104,7 +100,7 @@
       </div>
 
       {% if has_price %}
-      <a href="/calculator" class="btn btn--accent btn--wide" data-i18n="sp_price_btn_calc">Рассчитать в калькуляторе</a>
+      <a href="/calculator/" class="btn btn--accent btn--wide" data-i18n="sp_price_btn_calc">Рассчитать в калькуляторе</a>
       {% else %}
       <a href="#contact" class="btn btn--accent btn--wide" data-i18n="sp_price_btn_ask">Получить оценку стоимости</a>
       {% endif %}
@@ -119,7 +115,7 @@
     <div class="container">
       <div class="heading heading--row">
         <h2 data-i18n="sp_examples_title">Примеры проектов</h2>
-        <a href="/portfolio" class="more-link">
+        <a href="/portfolio/" class="more-link">
           <span data-i18n="portfolio_all">Все проекты</span>
           <svg class="icon"><use href="#i-chevron"/></svg>
         </a>

@@ -1,12 +1,39 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="{{ meta.lang|default:'ru' }}">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}DevIX | Современная веб разработка{% endblock %}</title>
-  <meta name="description" content="{% block description %}DevIX - Professional website development agency. We create stunning, high-performance websites for your business.{% endblock %}">
+  <title>{{ meta.title|default:'DevIX' }}</title>
+  <meta name="description" content="{{ meta.description }}">
+  {% if meta.noindex %}
+  <meta name="robots" content="noindex, follow">
+  {% else %}
+  <link rel="canonical" href="{{ meta.canonical }}">
+  {% for link in meta.alternates %}
+  <link rel="alternate" hreflang="{{ link.lang }}" href="{{ link.url }}">
+  {% endfor %}
+  {% endif %}
+  {% if meta.google_verification %}<meta name="google-site-verification" content="{{ meta.google_verification }}">{% endif %}
+  {% if meta.yandex_verification %}<meta name="yandex-verification" content="{{ meta.yandex_verification }}">{% endif %}
+
+  <!-- Social preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="DevIX">
+  <meta property="og:title" content="{{ meta.title }}">
+  <meta property="og:description" content="{{ meta.description }}">
+  <meta property="og:url" content="{{ meta.canonical }}">
+  <meta property="og:image" content="{{ meta.image }}">
+  <meta property="og:locale" content="{{ meta.locale }}">
+  {% for locale in meta.other_locales %}
+  <meta property="og:locale:alternate" content="{{ locale }}">
+  {% endfor %}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">{{ meta.json_ld|safe }}</script>
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,36 +42,39 @@
 
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="{% static 'img/devixco.svg' %}">
-
-  <!-- Hide content until translations are loaded -->
-  <script>
-    document.documentElement.style.visibility = 'hidden';
-  </script>
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
 
   <!-- Stylesheet -->
-  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261004o">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}?v=20261117a">
 
-  <!-- Sync Translation Loader -->
+  <!-- Language -->
   <script>
-    // Определяем язык: сначала localStorage, потом URL
+    // Сервер отдаёт страницу уже на языке адреса. Перевод в браузере нужен, только
+    // если посетитель раньше выбрал другой язык: тогда страница переводится до показа.
     (function() {
-      let lang = localStorage.getItem('lang');
-      if (!lang || (lang !== 'en' && lang !== 'ru')) {
-        lang = window.location.pathname.startsWith('/en') ? 'en' : 'ru';
-      }
+      const pageLang = document.documentElement.lang;
+      let lang = pageLang;
+      try {
+        const saved = localStorage.getItem('lang');
+        if (saved === 'en' || saved === 'ru') lang = saved;
+      } catch (e) {}
+
+      window.pageLang = pageLang;
+      window.currentLang = lang;
+      if (lang === pageLang) return;
+
+      document.documentElement.style.visibility = 'hidden';
       document.documentElement.lang = lang;
 
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `/static/js/${lang}.json?v=20261004o`, false);
+        xhr.open('GET', `/static/js/${lang}.json?v=20261117a`, false);
         xhr.send();
 
         if (xhr.status === 200) {
           window.translations = JSON.parse(xhr.responseText);
-          window.currentLang = lang;
 
-          // Обновляем title страницы сразу
-          const titleKey = '{% block title_key %}page_title_index{% endblock %}';
+          const titleKey = '{{ meta.title_key }}';
           if (window.translations[titleKey]) {
             document.title = window.translations[titleKey];
           }
@@ -88,7 +118,7 @@
   </script>
 
   <!-- Language Translator Script -->
-  <script src="{% static 'js/translator.js' %}?v=20261004o"></script>
+  <script src="{% static 'js/translator.js' %}?v=20261117a"></script>
   {% block extra_head %}{% endblock %}
 </head>
 
@@ -108,7 +138,7 @@
   {% include 'partials/footer.html' %}
 
   <!-- JavaScript -->
-  <script src="{% static 'js/script.js' %}?v=20261004o"></script>
+  <script src="{% static 'js/script.js' %}?v=20261117a"></script>
   {% block extra_js %}{% endblock %}
 </body>
 

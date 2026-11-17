@@ -1,16 +1,12 @@
 {% extends 'layout.html' %}
 {% load static %}
 
-{% block title %}{{ page_title.text }}{% endblock %}
-{% block description %}{{ desc.text }}{% endblock %}
-{% block title_key %}{{ page_title.key }}{% endblock %}
-
 {% block content %}
   <!-- CASE SECTION -->
   <section class="section">
     <div class="container case">
       <nav class="case__crumbs">
-        <a href="/portfolio" data-i18n="nav_portfolio">Портфолио</a>
+        <a href="/portfolio/" data-i18n="nav_portfolio">Портфолио</a>
         <span>→</span>
         <span data-i18n="{{ title.key }}">{{ title.text }}</span>
       </nav>
@@ -18,7 +14,7 @@
       <h1 data-i18n="{{ title.key }}">{{ title.text }}</h1>
 
       {% if image %}
-      <img class="case__image" src="{% static image %}" alt="{{ title.text }}">
+      <img class="case__image" src="{% static image %}" alt="{{ title.text }}"{% if image_size %} width="{{ image_size.0 }}" height="{{ image_size.1 }}"{% endif %} fetchpriority="high">
       {% else %}
       {% include 'partials/cover.html' with key=title.key text=title.text extra='case__image' %}
       {% endif %}
